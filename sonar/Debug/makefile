@@ -8,6 +8,8 @@
 EEOPT += __USE_STM32F4XX_SPD__
 
 
+EEOPT += __USE_STM32F4XX_SPD_TIM__
+
 
 ############################################################################
 #
@@ -42,7 +44,6 @@ EEOPT += __ADD_LIBS__
 # Automatic options
 #
 ############################################################################
-EEOPT += __RTD_LINUX__
 EEOPT += __STM32__
 EEOPT += __STM32F4xx__
 EEOPT += __CORTEX_MX__
@@ -69,7 +70,7 @@ EEBASE := ${ERIKA_FILES}
 else # ERIKA_FILES
 
 ifndef EEBASE
-        EEBASE := /usr/share/eclipse/plugins/com.eu.evidence.ee_2.7.0.20160615_1643/ee_files
+        EEBASE := /Applications/eclipse/plugins/com.eu.evidence.ee_2.7.0.20160615_1643/ee_files
 else
         $(warning The usage of EEBASE is deprecated. Please use ERIKA_FILES)
 endif
@@ -88,7 +89,7 @@ $(info Using erika files in $(EEBASE))
 APPBASE := ..
 OUTBASE := Debug
 
-$(eval $(call check_and_set_linux_compiler_path,GNU_ARM_ROOT,/usr/))
+$(eval $(call check_and_set_linux_compiler_path,GNU_ARM_ROOT,/usr/local))
 
 
 ############################################################################
@@ -120,7 +121,7 @@ LIB_OPT  += __LIB_STM32F4_DISCOVERY__
 # Sources
 #
 ############################################################################
-APP_SRCS += eecfg.c code.c motor.c
+APP_SRCS += eecfg.c code.c motor.c Lib/tm_stm32f4_gpio.c Lib/tm_stm32f4_pwm.c Lib/tm_stm32f4_timer_properties.c Lib/tm_stm32f4_disco.c
 
 
 ############################################################################

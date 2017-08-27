@@ -61,7 +61,6 @@
  * Automatic options
  *
  **************************************************************************/
-#define __RTD_LINUX__
 #define __STM32__
 #define __STM32F4xx__
 #define __CORTEX_MX__
