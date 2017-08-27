@@ -38,13 +38,15 @@
  * Boston, MA 02110-1301 USA.
  * ###*E*### */
 
+/* Include core modules */
 #include "ee.h"
-
 #include "stm32f4xx.h"
 
-
-GPIO_InitTypeDef  GPIO_InitStructure;
-
+/* Include my libraries here */
+#include "motor.h"
+#include "constants.h"
+#include "Lib/tm_stm32f4_pwm.h"
+#include "Lib/tm_stm32f4_disco.h"
 
 /*
  * SysTick ISR2
@@ -55,79 +57,42 @@ ISR2(systick_handler)
 	CounterTick(myCounter);
 }
 
-#define MAX_ROUND 5;
-
 TASK(TaskIOToggle)
 {
-
-	static EE_UINT8 act = 0;
-
-	switch (act) {
-	case 0:
-		GPIO_SetBits(GPIOD, GPIO_Pin_12);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	case 1:
-		GPIO_SetBits(GPIOD, GPIO_Pin_13);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	case 2:
-		GPIO_SetBits(GPIOD, GPIO_Pin_14);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	case 3:
-		GPIO_SetBits(GPIOD, GPIO_Pin_15);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	case 4:
-		GPIO_ResetBits(GPIOD, GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	}
+	TM_DISCO_LedToggle(LED_RED);
+	motor_step();
 }
 
-int main(void)
-{
-
-	/* Preconfiguration before using DAC----------------------------------------*/
-	GPIO_InitTypeDef GPIO_InitStructure;
-
-	/*
-	 * Setup the microcontroller system.
-	 * Initialize the Embedded Flash Interface, the PLL and update the
-	 * SystemFrequency variable.
-	 * For default settings look at:
-	 * pkg/mcu/st_stm32_stm32f4xx/src/system_stm32f4xx.c
-	 */
+void System_Init() {
 	SystemInit();
-
-	/*Initialize Erika related stuffs*/
 	EE_system_init();
+}
 
-	/*Initialize systick */
+void Systick_Init() {
 	EE_systick_set_period(MILLISECONDS_TO_TICKS(1, SystemCoreClock));
 	EE_systick_enable_int();
 	EE_systick_start();
-
-	/* GPIOD Periph clock enable */
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-
-	/* Configure PD12, PD13, PD14 and PD15 in output pushpull mode */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 |
-									GPIO_Pin_15;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-	/* Program cyclic alarms which will fire after an initial offset,
-	 * and after that periodically
-	 * */
-	SetRelAlarm(AlarmToggle, 10, 200);
-
-	/* Forever loop: background activities (if any) should go here */
-	for (;;);
-
 }
 
+void Calibrazione(void) {
+	while(!TM_DISCO_ButtonPressed())
+		motor_set_pos(MOTOR_MID);
+}
+
+int main(void) {
+	System_Init();
+	Systick_Init();
+
+	/* Initialize leds on board */
+	TM_DISCO_LedInit();
+
+	/* Initialize button on board */
+	TM_DISCO_ButtonInit();
+
+	motor_init(MOTOR_MID, LEFT, MOTOR_INC);
+	//Calibrazione();
+
+	SetRelAlarm(AlarmToggle, 10, 20);
+
+	while (1) {}
+}

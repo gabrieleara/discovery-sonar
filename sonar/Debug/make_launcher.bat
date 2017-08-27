@@ -8,7 +8,7 @@
 #   i.e.   ${workspace_loc:sonar}/make_launcher.bat
 
 
-ERIKA_FILES=/usr/share/eclipse/plugins/com.eu.evidence.ee_2.7.0.20160615_1643/ee_files
+ERIKA_FILES=/Applications/eclipse/plugins/com.eu.evidence.ee_2.7.0.20160615_1643/ee_files
 export ERIKA_FILES
 
 make $@

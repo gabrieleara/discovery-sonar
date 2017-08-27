@@ -31,11 +31,6 @@ typedef enum { false, true } bool_t;
                             // Defines the interval in number of ticks between
                             // one motor move and the following one
 
-#define MOTOR_MIN   (550)   // Defines the min position of the motor (+90°)
-#define MOTOR_MAX   (2250)  // Defines the max position of the motor (-90°)
-#define MOTOR_RANGE (POSITION_MAX-POSITION_MIN)
-                            // The range of the positions of the motor
-
 #define MOTOR_INC   (10)    // The increment used each time we want to move
                             // the motor at each MOTOR_PERIOD
 
