@@ -22,12 +22,12 @@ typedef enum { false, true } bool_t;
 
 
 #define SYST_PERIOD     (10)// Defines the systick period in microseconds
-#define MOTOR_PERIOD    (20000)
+#define MOTOR_PERIOD    (25000)
                             // Defines the interval in microseconds between one
                             // motor move and the following one, must be an
                             // integer multiple of SYST_PERIOD
 
-#define MODTOR_PERIOD_TICKS (MOTOR_PERIOD / SYST_PERIOD)
+#define MOTOR_PERIOD_TICKS (MOTOR_PERIOD / SYST_PERIOD)
                             // Defines the interval in number of ticks between
                             // one motor move and the following one
 

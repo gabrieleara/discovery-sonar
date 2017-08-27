@@ -41,49 +41,55 @@
 #include "ee.h"
 
 #include "stm32f4xx.h"
+#include "stm32f4_discovery.h"
+#include "stm32f4_discovery_lcd.h"
+#include "lcd_log.h"
+
+#include <stdio.h>
+
+#include "constants.h"
+#include "sensor.h"
+
+bool_t hey = false;
+
+int32_t sensor_left = SENSOR_DIST_MAX;
+int32_t sensor_right = SENSOR_DIST_MAX;
 
 
-GPIO_InitTypeDef  GPIO_InitStructure;
-
-
-/*
- * SysTick ISR2
- */
 ISR2(systick_handler)
 {
-	/* count the interrupts, waking up expired alarms */
-	CounterTick(myCounter);
+    /* count the interrupts, waking up expired alarms */
+    CounterTick(sysCounter);
+
+    sensors_read();
 }
 
-#define MAX_ROUND 5;
+static int32_t dist = SENSOR_DIST_MAX;
 
-TASK(TaskIOToggle)
+TASK(TaskOut)
 {
+    static bool_t keepalive = false;
 
-	static EE_UINT8 act = 0;
+    LCD_UsrLog("Right: %d ticks.\r\n", sensor_right);
+    LCD_UsrLog("Left %d ticks.\r\n", sensor_left);
+    LCD_UsrLog("Keepalive %d.\r\n", keepalive);
 
-	switch (act) {
-	case 0:
-		GPIO_SetBits(GPIOD, GPIO_Pin_12);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	case 1:
-		GPIO_SetBits(GPIOD, GPIO_Pin_13);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	case 2:
-		GPIO_SetBits(GPIOD, GPIO_Pin_14);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	case 3:
-		GPIO_SetBits(GPIOD, GPIO_Pin_15);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	case 4:
-		GPIO_ResetBits(GPIOD, GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15);
-		act = (act + 1) % MAX_ROUND;
-	break;
-	}
+    keepalive = ! keepalive;
+}
+
+TASK(TaskIncrement)
+{
+    sensors_trigger();
+    dist = sensors_get_last_distance();
+
+    // TODO: stuff with the distance
+}
+
+TASK(TaskStopTrigger)
+{
+    sensors_trigger();
+
+    // TODO: stuff with the distance
 }
 
 int main(void)
@@ -105,26 +111,29 @@ int main(void)
 	EE_system_init();
 
 	/*Initialize systick */
-	EE_systick_set_period(MILLISECONDS_TO_TICKS(1, SystemCoreClock));
+	EE_systick_set_period(MICROSECONDS_TO_TICKS(SYST_PERIOD, SystemCoreClock));
 	EE_systick_enable_int();
 	EE_systick_start();
 
-	/* GPIOD Periph clock enable */
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+	/*Initialize the LCD*/
+    STM32f4_Discovery_LCD_Init();
+    LCD_LOG_Init();
+    LCD_LOG_SetHeader("Hi ... Erika is running!");
+    LCD_LOG_SetFooter("Erika RTOS LCD log Demo");
+    LCD_UsrLog("Test-> Log Initialized!\r\n");
+    LCD_DbgLog("Test-> DBG message!\r\n");
+    LCD_ErrLog("Test-> ERR message!\r\n");
 
-	/* Configure PD12, PD13, PD14 and PD15 in output pushpull mode */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 |
-									GPIO_Pin_15;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOD, &GPIO_InitStructure);
+	sensors_init();
 
 	/* Program cyclic alarms which will fire after an initial offset,
 	 * and after that periodically
 	 * */
-	SetRelAlarm(AlarmToggle, 10, 200);
+	// TODO: constants
+	SetRelAlarm(Task1Alarm, 10, MOTOR_PERIOD_TICKS);
+	SetRelAlarm(Task2Alarm, 20, MOTOR_PERIOD_TICKS);
+	SetRelAlarm(TaskOutAlarm, 100, 1000 * 1000 / SYST_PERIOD);
+
 
 	/* Forever loop: background activities (if any) should go here */
 	for (;;);

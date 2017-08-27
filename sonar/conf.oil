@@ -55,6 +55,13 @@ CPU mySystem {
 		CPU_DATA = CORTEX_MX {
 			MODEL = M4;
 			APP_SRC = "code.c";
+			APP_SRC = "sensor.c";
+			
+			APP_SRC = "lib/tm_stm32f4_gpio.c";
+			
+			
+			
+			
 			//COMPILER_TYPE = KEIL; 
 			COMPILER_TYPE = GNU;
 			MULTI_STACK = FALSE;
@@ -71,7 +78,13 @@ CPU mySystem {
 		
 		LIB = ENABLE { NAME = "STM32F4XX_SPD"; };
 		
-		LIB = ENABLE { NAME = "STM32F4_DISCOVERY"; };
+		LIB = ENABLE { NAME = "STM32F4_DISCOVERY";
+			STM32F4_DISCOVERY = ENABLE {
+				USELEDS = TRUE;
+				USELCD = TRUE;
+				USELCDLOG = TRUE;
+				};
+		};
 		
 		STATUS = EXTENDED;
 		STARTUPHOOK = FALSE;
@@ -87,15 +100,41 @@ CPU mySystem {
 
 	};
 	
-	COUNTER myCounter;
+	COUNTER sysCounter;
 
-	ALARM AlarmToggle {
-		COUNTER = myCounter;
-		ACTION = ACTIVATETASK { TASK = TaskIOToggle; };
+	ALARM Task1Alarm{
+		COUNTER = sysCounter;
+		ACTION = ACTIVATETASK { TASK = TaskIncrement; };
 	};
 	
-	TASK TaskIOToggle {
+	ALARM Task2Alarm{
+		COUNTER = sysCounter;
+		ACTION = ACTIVATETASK { TASK = TaskIncrement; };
+	};
+	
+	ALARM TaskOutAlarm{
+		COUNTER = sysCounter;
+		ACTION = ACTIVATETASK { TASK = TaskOut; };
+	};
+	
+	TASK TaskIncrement {
 		PRIORITY = 0x01;   /* High priority */
+		AUTOSTART = FALSE;
+		STACK = SHARED;
+		ACTIVATION = 1;    /* only one pending activation */
+		SCHEDULE = FULL;
+	};
+	
+	TASK TaskStopTrigger {
+		PRIORITY = 0x01;   /* High priority */
+		AUTOSTART = FALSE;
+		STACK = SHARED;
+		ACTIVATION = 1;    /* only one pending activation */
+		SCHEDULE = FULL;
+	};
+	
+	TASK TaskOut {
+		PRIORITY = 0x02;   /* Slightly less priority ? */
 		AUTOSTART = FALSE;
 		STACK = SHARED;
 		ACTIVATION = 1;    /* only one pending activation */

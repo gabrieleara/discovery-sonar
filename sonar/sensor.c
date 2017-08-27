@@ -32,17 +32,23 @@
 #define SENSOR_LX_ECHO_PIN      (GPIO_Pin_2)
 
 #define SENSOR_RX_ECHO_PORT     (GPIOE)
-#define SENSOR_RX_ECHO_PIN      (GPIO_Pin_0)
+#define SENSOR_RX_ECHO_PIN      (GPIO_Pin_5)
 
+// Undefine or set to zero this to use two different ports for the triggers
+#define SENSOR_TRIG_SAME_PORT   1
 
+// Undefine or set to zero this to use two different ports for the echoes
+#define SENSOR_ECHO_SAME_PORT   1
 
 /* ---------------------------
  * Data types
  * ---------------------------
  */
 
-#define SENSOR_LX       (0)     // Left sensor identifier
-#define SENSOR_RX       (1)     // Right sensor identifier
+typedef uint16_t        pin_t;
+typedef GPIO_TypeDef    port_t;
+
+enum sensor_id { SENSOR_LX = 0, SENSOR_RX = 1 };
 
 typedef struct SENSOR_STRUCT
 {
@@ -60,8 +66,11 @@ typedef struct SENSOR_STRUCT
 
     bool_t      skipping;       // TODO:
 
-    int32_t     echo_port;      // Echo port identifier
-    int32_t     echo_pin;       // Echo pin identifier
+    bool_t      previous_value; // The previous value of the echo, to check
+                                // whether a rising edge arrived
+
+    port_t*     echo_port;      // Echo port identifier
+    pin_t       echo_pin;       // Echo pin identifier
 } sensor_t;
 
 typedef struct SENSOR_STATE_STRUCT
@@ -76,21 +85,26 @@ typedef struct SENSOR_STATE_STRUCT
  * ---------------------------
  */
 
-static const sensor_t reset_sensor =
-{
+#define RESET_SENSOR {\
+.trig_sent = false,\
+.recording = false,\
+.last_distance = SENSOR_DIST_MAX,\
+.time_counter = 0,\
+.skipped = false,\
+}
 
-    .trig_sent = false,
-    .recording = false,
-    .last_distance = SENSOR_DIST_MAX,
-    .time_counter = 0,
-    .skipped = false,
-};
+
 
 static sensor_state_t sensor_state =
 {
     .last_distance = SENSOR_DIST_MAX,
-    .sensors = { reset_sensor, reset_sensor },
+    .sensors = { RESET_SENSOR, RESET_SENSOR },
 };
+
+
+// HACK:
+extern int32_t sensor_left;
+extern int32_t sensor_right;
 
 
 /* ---------------------------
@@ -102,9 +116,9 @@ static sensor_state_t sensor_state =
  * Gets the value of the sensor echo pin. Returns true if the pin is high, false
  * otherwise.
  * */
-inline bool_t get_echo_value(sensor_t* sensor)
+bool_t get_echo_value(sensor_t* sensor)
 {
-    return BOOL(TM_GPIO_GetInputPinValue(sensor->echo_port, sensor->echo_pin));
+    return BOOL(TM_GPIO_GetInputPinValue((sensor->echo_port), (sensor->echo_pin)));
 }
 
 /*
@@ -112,9 +126,9 @@ inline bool_t get_echo_value(sensor_t* sensor)
  * stopping if instead it's a negative edge.
  * As soon as it stops it updates the sensor last distance.
  * */
-inline void read_sensor(sensor_t* sensor)
+void read_sensor(sensor_t* sensor)
 {
-    bool_t      echo_value;
+    bool_t  echo_value;
 
     echo_value = get_echo_value(sensor);
 
@@ -141,9 +155,9 @@ inline void read_sensor(sensor_t* sensor)
 /*
  * Sends the trigger signal to both sensors.
  * */
-inline void send_trigger()
+void send_trigger()
 {
-#if SENSOR_LX_TRIG_PORT == SENSOR_RX_TRIG_PORT
+#if SENSOR_TRIG_SAME_PORT
     TM_GPIO_SetPinHigh(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN | SENSOR_RX_TRIG_PIN);
 #else
     TM_GPIO_SetPinHigh(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN);
@@ -154,9 +168,9 @@ inline void send_trigger()
 /*
  * Stops the trigger signal to both sensors.
  * */
-inline void stop_trigger()
+void stop_trigger()
 {
-#if SENSOR_LX_TRIG_PORT == SENSOR_RX_TRIG_PORT
+#if SENSOR_TRIG_SAME_PORT
     TM_GPIO_SetPinLow(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN | SENSOR_RX_TRIG_PIN);
 #else
     TM_GPIO_SetPinLow(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN);
@@ -169,19 +183,22 @@ inline void stop_trigger()
  * already finished. If not, marks the previous value as an error and
  * invalidates next record. TODO: invalidate next record.
  * */
-inline void check_finished(sensor_t* sensor)
+void check_finished(sensor_t* sensor)
 {
-    sensor.skipped = false;
+    sensor->skipped = false;
 
-    if(sensor->recording)
+
+
+    // If still recording or no echo arrived at all
+    if(sensor->recording || sensor->trig_sent)
     {
         // Should never happen, if it happens this is the handle
         sensor->last_distance = SENSOR_DIST_MAX;
         sensor->skipped = true;
     }
 
-    sensor->recording = false;
-    sensor->trig_sent = true;
+    // TODO: decide if keep it or not
+    // sensor->recording = false;
 }
 
 /*
@@ -191,6 +208,9 @@ void update_distance()
 {
     // NOTICE: If both sensors skipped the last measurement, they both measured
     // SENSOR_DIST_MAX
+
+    sensor_left = sensor_state.sensors[SENSOR_LX].last_distance;
+    sensor_right = sensor_state.sensors[SENSOR_RX].last_distance;
 
     if(sensor_state.sensors[SENSOR_LX].skipped)
     {
@@ -225,8 +245,8 @@ void sensors_init()
     sensor_state.sensors[SENSOR_RX].echo_port   = SENSOR_RX_ECHO_PORT;
     sensor_state.sensors[SENSOR_RX].echo_pin    = SENSOR_RX_ECHO_PIN;
 
-    // TODO: init all ports!
-#if SENSOR_LX_TRIG_PORT == SENSOR_LX_TRIG_PORT
+    // Ports and pins initialization
+#if SENSOR_TRIG_SAME_PORT
     TM_GPIO_Init(SENSOR_LX_TRIG_PORT,
             SENSOR_LX_TRIG_PIN | SENSOR_RX_TRIG_PIN,
             TM_GPIO_Mode_OUT,
@@ -249,7 +269,7 @@ void sensors_init()
                 TM_GPIO_Speed_High);
 #endif
 
-#if SENSOR_LX_ECHO_PORT == SENSOR_LX_ECHO_PORT
+#if SENSOR_ECHO_SAME_PORT
     TM_GPIO_Init(SENSOR_LX_ECHO_PORT,
             SENSOR_LX_ECHO_PIN | SENSOR_RX_ECHO_PIN,
             TM_GPIO_Mode_IN,
@@ -292,12 +312,15 @@ static bool_t set_reset = false;
 
     if(set_reset)
     {
-        send_trigger();
-
         check_finished(&sensor_state.sensors[SENSOR_LX]);
         check_finished(&sensor_state.sensors[SENSOR_RX]);
 
         update_distance();
+
+        send_trigger();
+
+        sensor_state.sensors[SENSOR_LX].trig_sent =
+                sensor_state.sensors[SENSOR_RX].trig_sent = true;
     }
     else
         stop_trigger();
