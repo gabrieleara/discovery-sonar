@@ -22,12 +22,20 @@ motor my_motor;	// Motor instance
 // Functions
 // ---------------------------
 
-void motor_init(uint32_t init_pos, dir init_dir, uint32_t init_stp) {
+uint32_t motor_get_motor_pos(uint32_t user_pos) {
+	if(user_pos < USR_MIN_POS)
+		return MOTOR_MIN;
+	else if(user_pos > USR_MAX_POS)
+		return MOTOR_MAX;
+
+	return MOTOR_MIN + 1/USR_RANGE_SLOPE * (user_pos - USR_MIN_POS);
+}
+
+void motor_init(uint32_t init_user_pos, dir init_dir) {
 
 	// Set initial direction and position
-	my_motor.curr_pos = init_pos;
+	my_motor.curr_pos = motor_get_motor_pos(init_user_pos);
 	my_motor.curr_dir = init_dir;
-	my_motor.curr_stp = init_stp;
 
     // Set PWM to frequency on timer
     TM_PWM_InitTimer(TIMER, &my_motor.TIM_Data, MOTOR_FRQ);
@@ -39,19 +47,13 @@ void motor_init(uint32_t init_pos, dir init_dir, uint32_t init_stp) {
     TM_PWM_SetChannelMicros(&my_motor.TIM_Data, CHANNEL, my_motor.curr_pos);
 }
 
-void motor_set_pos(uint32_t position) {
+void motor_set_pos(uint32_t user_pos) {
 
 	// Set new motor position
-	my_motor.curr_pos = position;
+	my_motor.curr_pos = motor_get_motor_pos(user_pos);
 
 	// Write new position on TIM
 	TM_PWM_SetChannelMicros(&my_motor.TIM_Data, CHANNEL, my_motor.curr_pos);
-}
-
-void motor_set_stp(uint32_t step) {
-
-	// Set new value for the step increment
-	my_motor.curr_stp = step;
 }
 
 void motor_set_dir(dir direction) {
@@ -67,7 +69,7 @@ void motor_step() {
 		return;
 
 	// Set new motor position
-	my_motor.curr_pos += my_motor.curr_stp * my_motor.curr_dir;
+	my_motor.curr_pos += MOTOR_STP * my_motor.curr_dir;
 
 	// Check motor physical limit
 	if(my_motor.curr_pos >= MOTOR_MAX || my_motor.curr_pos <= MOTOR_MIN)

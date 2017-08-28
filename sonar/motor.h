@@ -25,13 +25,25 @@
 // ---------------------------
 
 #define MOTOR_FRQ	(50)	// Defines the motor working frequency (Mhz)
+#define MOTOR_STP	(10)	// Defines the minimum step amplitude
 #define MOTOR_MIN   (550)   // Defines the min position of the motor (+90°)
 #define MOTOR_MAX   (2250)  // Defines the max position of the motor (-90°)
 
 #define MOTOR_MID	((MOTOR_MAX-MOTOR_MIN)/2 + MOTOR_MIN)
 							// Defines the mid position of the motor (0°)
-#define MOTOR_RANGE (POSITION_MAX-POSITION_MIN)
+#define MOTOR_RANGE (MOTOR_MAX-MOTOR_MIN)
                             // The range of the positions of the motor
+
+// --------------------------
+// User domain position range
+// --------------------------
+
+#define USR_MIN_POS		(0)	// Defines the min position in the user domain
+#define USR_MAX_POS 	(MOTOR_RANGE / MOTOR_STP)
+							// Defines the max position in the user domain
+#define USR_RANGE_SLOPE ((USR_MAX_POS-USR_MIN_POS)/(MOTOR_RANGE))
+							// Defines the slope of user range map
+
 
 // ------------------------
 // STM32F4 timer/pwm pinout
@@ -55,7 +67,6 @@ typedef enum {		// Possible direction enumerator
 typedef struct {				// PWM Motor data structure
 	uint32_t 		curr_pos;	// Motor current position
 	dir 			curr_dir;	// Motor current direction
-	uint32_t 		curr_stp;	// Motor current step increment
 	TM_PWM_TIM_t 	TIM_Data;	// Motor timer data structure
 } motor;
 
@@ -63,7 +74,26 @@ typedef struct {				// PWM Motor data structure
 // Functions
 // ---------------------------
 
+/*
+ * Invert motor direction
+ * in:	void
+ * ret: void
+ */
 #define motor_invert_dir() (my_motor.curr_dir *= -1)
+
+/*
+ * Return the user range domain motor position
+ * in:	void
+ * ret: motor position in user range domain
+ */
+#define motor_get_user_pos() (USR_MIN_POS + USR_RANGE_SLOPE * (my_motor.curr_pos - MOTOR_MIN))
+
+/*
+ * Convert the user domain motor position in motor domain position
+ * in:	void
+ * ret: motor position in user range domain
+ */
+uint32_t motor_get_motor_pos(uint32_t user_pos);
 
 /*
  * Initialize motor with initial parameter
@@ -72,7 +102,7 @@ typedef struct {				// PWM Motor data structure
  * 		default motor increment
  * ret: void
  */
-void motor_init(uint32_t init_pos, dir init_dir, uint32_t init_stp);
+void motor_init(uint32_t init_pos, dir init_dir);
 
 /*
  * Set position of the motor and move the motor to the chosen position
@@ -80,13 +110,6 @@ void motor_init(uint32_t init_pos, dir init_dir, uint32_t init_stp);
  * ret: void
  */
 void motor_set_pos(uint32_t position);
-
-/*
- * Set a new value for the single step increment of the motor
- * in:	new value for the step increment
- * ret: void
- */
-void motor_set_stp(uint32_t step);
 
 /*
  * Set a new value for the direction of the motor movement
