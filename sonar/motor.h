@@ -41,9 +41,12 @@
 #define USR_MIN_POS		(0)	// Defines the min position in the user domain
 #define USR_MAX_POS 	(MOTOR_RANGE / MOTOR_STP)
 							// Defines the max position in the user domain
-#define USR_RANGE_SLOPE ((USR_MAX_POS-USR_MIN_POS)/(MOTOR_RANGE))
-							// Defines the slope of user range map
+#define USR_MID_POS		(USR_MAX_POS / 2)
+							// Defines the mid position in the user domain
 
+#define USR_RANGE_SLOPE (((double)USR_MAX_POS-(double)USR_MIN_POS) \
+							/ (double)MOTOR_RANGE)
+							// Defines the slope of user range map
 
 // ------------------------
 // STM32F4 timer/pwm pinout

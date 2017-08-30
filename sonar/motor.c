@@ -23,12 +23,14 @@ motor my_motor;	// Motor instance
 // ---------------------------
 
 uint32_t motor_get_motor_pos(uint32_t user_pos) {
+	double motor_pos;
+
 	if(user_pos < USR_MIN_POS)
 		return MOTOR_MIN;
 	else if(user_pos > USR_MAX_POS)
 		return MOTOR_MAX;
 
-	return MOTOR_MIN + 1/USR_RANGE_SLOPE * (user_pos - USR_MIN_POS);
+	return MOTOR_MIN + 1.0/USR_RANGE_SLOPE * (user_pos - USR_MIN_POS);
 }
 
 void motor_init(uint32_t init_user_pos, dir init_dir) {

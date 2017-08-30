@@ -76,7 +76,7 @@ void Systick_Init() {
 
 void Calibrazione(void) {
 	while(!TM_DISCO_ButtonPressed())
-		motor_set_pos(MOTOR_MID);
+		motor_set_pos(USR_MID_POS);
 }
 
 int main(void) {
@@ -89,8 +89,8 @@ int main(void) {
 	/* Initialize button on board */
 	TM_DISCO_ButtonInit();
 
-	motor_init(MOTOR_MID, LEFT, MOTOR_INC);
-	//Calibrazione();
+	motor_init(USR_MID_POS, LEFT);
+	Calibrazione();
 
 	SetRelAlarm(AlarmToggle, 10, 20);
 
