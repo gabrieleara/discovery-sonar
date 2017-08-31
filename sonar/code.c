@@ -13,35 +13,15 @@
 
 #include "gui.h"
 
+
 static int_t    pos = 0;
 static bool_t   start = true;
 
-/*
- * SysTick ISR2
- */
 ISR2(systick_handler)
 {
-    /* count the interrupts, waking up expired alarms */
     CounterTick(sysCount);
+    sensors_read();
 }
-
-static int_t rand_seed = 15456;
-static int_t rand_modulus = 1373;
-static int_t rand_mul = 5651;
-
-int rand()
-{
-    rand_seed = (rand_seed*rand_mul) % rand_modulus;
-    return rand_seed;
-}
-
-int srand(int seed)
-{
-    rand_seed = seed;
-
-    return rand();
-}
-
 
 /*
  * This task is called each time the radar needs to move to a new position. It
@@ -60,29 +40,15 @@ TASK(TaskStep)
     if(!start)
     {
         motor_step();
-        // TODO: send sensor trigger
+        sensors_trigger();
 
-        // TODO: read sensor value
-
-        // TODO: remove begin
-        changes = changes+1 % 4;
-
-        if(changes == 0)
-            dist += rand() % 50 - 25;
-        else
-            dist += rand() % 20 - 10;
-
-        if(dist < 0)
-            dist = 0;
-        else if(dist > 700)
-            dist = 700;
-        // TODO: remove end
+        dist = sensors_get_last_distance();
 
         gui_set_position(pos, dist);
     } else
     {
         start = false;
-        // TODO: send sensor trigger
+        sensors_trigger();
     }
 }
 
@@ -116,6 +82,8 @@ void arm_calibration_wait(void)
         motor_set_pos(USR_MID_POS);
 }
 
+// TODO: add tasks for sensor
+
 int main(void) {
     system_init();
     systick_init();
@@ -127,6 +95,8 @@ int main(void) {
     TM_DISCO_ButtonInit();
 
     gui_init();
+    
+    // TODO: initialize sensor
 
     motor_init(MOTOR_MID, LEFT);
 

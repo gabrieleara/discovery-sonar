@@ -56,9 +56,9 @@ CPU mySystem {
 			// vero file main del progetto sarà main.c
 			// (se ti va bene)
 			APP_SRC = "code.c";
-			// APP_SRC = "main.c"
+
+			APP_SRC = "sensor.c";
 			APP_SRC = "motor.c";
-			
 			APP_SRC = "gui.c";
 			
 			APP_SRC = "lcd/widget.c";
@@ -70,7 +70,6 @@ CPU mySystem {
 			APP_SRC = "lib/tm_stm32f4_pwm.c";
 			APP_SRC = "lib/tm_stm32f4_timer_properties.c";
 			APP_SRC = "lib/tm_stm32f4_disco.c";
-			
 			
 			COMPILER_TYPE = GNU;
 			MULTI_STACK = FALSE;
@@ -93,9 +92,9 @@ CPU mySystem {
 		};
 		* 
 		*/
-		
-		
-		LIB = ENABLE { NAME = "STM32F4XX_SPD"; 
+        
+        
+        LIB = ENABLE { NAME = "STM32F4XX_SPD"; 
 			STM32F4XX_SPD = ENABLE {
 				USETIM = TRUE;
 				USEGPIO = TRUE;
@@ -128,7 +127,7 @@ CPU mySystem {
 
 		KERNEL_TYPE = FP;
 	};
-	
+
 	COUNTER sysCount;
 
 	ALARM AlarmStep {

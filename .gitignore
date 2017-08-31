@@ -45,12 +45,15 @@
 # Kernel Module Compile Results
 *.mod*
 *.cmd
+
+# User-Defined Ignores
 .tmp_versions/
 **/Debug/*
 modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
 *.bin
 
 # Mac OS Generated files
@@ -58,3 +61,4 @@ dkms.conf
 .DS_Store?
 ._*
 .Spotlight-V100
+
