@@ -1,8 +1,8 @@
 /*
  * sensor.c
  *
- * This file contains all the functions and tasks that interact with the servo
- * motor used for this project.
+ * This file contains all the functions that interact with the two ultra sonic
+ * sensors connected to the board.
  *
  * */
 
@@ -45,10 +45,24 @@
  * ---------------------------
  */
 
-typedef uint16_t        pin_t;
+typedef uint_t          pin_t;
 typedef GPIO_TypeDef    port_t;
 
 enum sensor_id { SENSOR_LX = 0, SENSOR_RX = 1 };
+
+/*
+ * Defines the possible states the sensor can be in.
+ */
+typedef enum
+{
+    SENSOR_ECHO_OK = 0,         // Everything works as expected
+    SENSOR_ECHO_LOST,           // No echo arrived
+    SENSOR_ECHO_LONG,           // Echo is taking too long to complete
+    SENSOR_ECHO_NEXT_OK,        // The previous echo value was not ok, but the
+                                // following one will be hopefully good
+} sensor_echo_state_t;
+
+
 
 typedef struct SENSOR_STRUCT
 {
@@ -56,15 +70,12 @@ typedef struct SENSOR_STRUCT
                                 // not
     bool_t      recording;      // Whether the sensor is waiting the end of the
                                 // echo or not
-    int_t    last_distance;  // Last calculated distance in number of ticks
-    int_t    time_counter;   // Counter used to count the number of ticks
+    int_t       last_distance;  // Last calculated distance in number of ticks
+    int_t       time_counter;   // Counter used to count the number of ticks
                                 // since last start of recording
 
-    bool_t      skipped;        // Whether the last trigger has been skipped or
-                                // not because the previous echo was too long,
-                                // this should never get to be true
-
-    bool_t      skipping;       // TODO:
+    sensor_echo_state_t echo_state;
+                                // See the previous type definition
 
     bool_t      previous_value; // The previous value of the echo, to check
                                 // whether a rising edge arrived
@@ -85,20 +96,18 @@ typedef struct SENSOR_STATE_STRUCT
  * ---------------------------
  */
 
-#define RESET_SENSOR {\
+#define SENSOR_INIT {\
 .trig_sent = false,\
 .recording = false,\
 .last_distance = SENSOR_DIST_MAX,\
 .time_counter = 0,\
-.skipped = false,\
+.echo_state = SENSOR_ECHO_NEXT_OK,\
 }
-
-
 
 static sensor_state_t sensor_state =
 {
     .last_distance = SENSOR_DIST_MAX,
-    .sensors = { RESET_SENSOR, RESET_SENSOR },
+    .sensors = { SENSOR_INIT, SENSOR_INIT },
 };
 
 /* ---------------------------
@@ -134,10 +143,13 @@ void read_sensor(sensor_t* sensor)
         {
             // I have to stop recording!
             sensor->recording = false;
-            sensor->last_distance = sensor->time_counter;
+
+            // We save an echo only if it arrived at the right time
+            if(sensor->echo_state == SENSOR_ECHO_OK || sensor->echo_state == SENSOR_ECHO_NEXT_OK)
+                sensor->last_distance = sensor->time_counter;
         }
     }
-    else if(sensor->trig_sent && echo_value /* && !sensor->skipped */)
+    else if(sensor->trig_sent && echo_value)
     {
         sensor->time_counter = 0;
         sensor->recording = true;
@@ -145,18 +157,37 @@ void read_sensor(sensor_t* sensor)
     }
 }
 
-
 /*
  * Sends the trigger signal to both sensors.
  * */
 void send_trigger()
 {
 #if SENSOR_TRIG_SAME_PORT
-    TM_GPIO_SetPinHigh(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN | SENSOR_RX_TRIG_PIN);
-#else
-    TM_GPIO_SetPinHigh(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN);
-    TM_GPIO_SetPinHigh(SENSOR_RX_TRIG_PORT, SENSOR_RX_TRIG_PIN);
+    if(sensor_state.sensors[SENSOR_LX].echo_state != SENSOR_ECHO_LONG &&
+            sensor_state.sensors[SENSOR_RX].echo_state != SENSOR_ECHO_LONG)
+    {
+        TM_GPIO_SetPinHigh(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN | SENSOR_RX_TRIG_PIN);
+        sensor_state.sensors[SENSOR_LX].trig_sent =
+                        sensor_state.sensors[SENSOR_RX].trig_sent = true;
+        return;
+    }
 #endif
+
+    if(sensor_state.sensors[SENSOR_LX].echo_state != SENSOR_ECHO_LONG)
+    {
+        TM_GPIO_SetPinHigh(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN);
+        sensor_state.sensors[SENSOR_LX].trig_sent = true;
+    }
+    else
+        sensor_state.sensors[SENSOR_LX].trig_sent = false;
+
+    if(sensor_state.sensors[SENSOR_RX].echo_state != SENSOR_ECHO_LONG)
+    {
+        TM_GPIO_SetPinHigh(SENSOR_RX_TRIG_PORT, SENSOR_RX_TRIG_PIN);
+        sensor_state.sensors[SENSOR_RX].trig_sent = true;
+    }
+    else
+        sensor_state.sensors[SENSOR_RX].trig_sent = false;
 }
 
 /*
@@ -175,24 +206,37 @@ void stop_trigger()
 /*
  * Checks if at the moment of sending a new trigger the previous echo was
  * already finished. If not, marks the previous value as an error and
- * invalidates next record. TODO: invalidate next record.
+ * invalidates next record.
  * */
 void check_finished(sensor_t* sensor)
 {
-    sensor->skipped = false;
-
-
-
-    // If still recording or no echo arrived at all
-    if(sensor->recording || sensor->trig_sent)
+    if(sensor->recording)
     {
-        // Should never happen, if it happens this is the handle
+        // Echo is taking too long to complete
+        sensor->echo_state = SENSOR_ECHO_LONG;
         sensor->last_distance = SENSOR_DIST_MAX;
-        sensor->skipped = true;
-    }
 
-    // TODO: decide if keep it or not
-    // sensor->recording = false;
+    } else if(sensor->trig_sent)
+    {
+        // Echo didn't arrive even if we sent a trigger
+        sensor->echo_state = SENSOR_ECHO_LOST;
+        sensor->last_distance = SENSOR_DIST_MAX;
+
+    } else if(sensor->echo_state == SENSOR_ECHO_LONG)
+    {
+        // Echo finished, but it doesn't need to be considered, since indeed
+        // it's a previous echo influencing this window.
+
+        // Hopefully the next measurement will be fine!
+
+        sensor->echo_state = SENSOR_ECHO_NEXT_OK;
+        sensor->last_distance = SENSOR_DIST_MAX;
+
+    } else
+    {
+        // The measured value is perfectly fine and can be used.
+        sensor->echo_state = SENSOR_ECHO_OK;
+    }
 }
 
 /*
@@ -203,21 +247,21 @@ void update_distance()
     // NOTICE: If both sensors skipped the last measurement, they both measured
     // SENSOR_DIST_MAX
 
-    if(sensor_state.sensors[SENSOR_LX].skipped)
+    if(sensor_state.sensors[SENSOR_LX].echo_state != SENSOR_ECHO_OK)
     {
         sensor_state.last_distance =
                 sensor_state.sensors[SENSOR_RX].last_distance;
         return;
     }
 
-    if(sensor_state.sensors[SENSOR_RX].skipped)
+    if(sensor_state.sensors[SENSOR_RX].echo_state != SENSOR_ECHO_OK)
     {
         sensor_state.last_distance =
                 sensor_state.sensors[SENSOR_LX].last_distance;
         return;
     }
 
-    // TODO: check if simple average is a good approximation
+    // FIXME: check if simple average is a good approximation
     sensor_state.last_distance = (sensor_state.sensors[SENSOR_LX].last_distance
             + sensor_state.sensors[SENSOR_RX].last_distance) / 2;
 }
@@ -309,9 +353,6 @@ static bool_t set_reset = false;
         update_distance();
 
         send_trigger();
-
-        sensor_state.sensors[SENSOR_LX].trig_sent =
-                sensor_state.sensors[SENSOR_RX].trig_sent = true;
     }
     else
         stop_trigger();

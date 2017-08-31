@@ -17,7 +17,7 @@
  *
  */
 
-#define SENSOR_DIST_MAX (41200 / SYST_PERIOD)
+//#define SENSOR_DIST_MAX (41200 / SYST_PERIOD)
                     // Maximum distance in number of ticks
                     // about 7 meters
 

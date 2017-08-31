@@ -88,8 +88,6 @@ void arm_calibration_wait(void)
         motor_set_pos(USR_MID_POS);
 }
 
-// TODO: add tasks for sensor
-
 int main(void) {
     system_init();
     systick_init();
@@ -102,7 +100,7 @@ int main(void) {
 
     gui_init();
     
-    // TODO: initialize sensor
+    sensors_init();
 
     motor_init(MOTOR_MID, LEFT);
 
