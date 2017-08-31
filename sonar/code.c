@@ -1,142 +1,114 @@
-/* ###*B*###
- * ERIKA Enterprise - a tiny RTOS for small microcontrollers
- *
- * Copyright (C) 2002-2013  Evidence Srl
- *
- * This file is part of ERIKA Enterprise.
- *
- * ERIKA Enterprise is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General Public License
- * version 2 as published by the Free Software Foundation,
- * (with a special exception described below).
- *
- * Linking this code statically or dynamically with other modules is
- * making a combined work based on this code.  Thus, the terms and
- * conditions of the GNU General Public License cover the whole
- * combination.
- *
- * As a special exception, the copyright holders of this library give you
- * permission to link this code with independent modules to produce an
- * executable, regardless of the license terms of these independent
- * modules, and to copy and distribute the resulting executable under
- * terms of your choice, provided that you also meet, for each linked
- * independent module, the terms and conditions of the license of that
- * module.  An independent module is a module which is not derived from
- * or based on this library.  If you modify this code, you may extend
- * this exception to your version of the code, but you are not
- * obligated to do so.  If you do not wish to do so, delete this
- * exception statement from your version.
- *
- * ERIKA Enterprise is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied warranty
- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License version 2 for more details.
- *
- * You should have received a copy of the GNU General Public License
- * version 2 along with ERIKA Enterprise; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301 USA.
- * ###*E*### */
+/*
+ * This file contains the main and the task's definitions of the system.
+ */
 
+/* Include core modules */
 #include "ee.h"
 
-#include "stm32f4xx.h"
-#include "stm32f4_discovery.h"
-#include "stm32f4_discovery_lcd.h"
-#include "lcd_log.h"
+#include "lib/tm_stm32f4_pwm.h"
+#include "lib/tm_stm32f4_disco.h"
 
-#include <stdio.h>
-
+#include "motor.h"
 #include "constants.h"
-#include "sensor.h"
 
-bool_t hey = false;
+#include "gui.h"
 
-int32_t sensor_left = SENSOR_DIST_MAX;
-int32_t sensor_right = SENSOR_DIST_MAX;
 
+static int_t    pos = 0;
+static bool_t   start = true;
 
 ISR2(systick_handler)
 {
-    /* count the interrupts, waking up expired alarms */
-    CounterTick(sysCounter);
-
+    CounterTick(sysCount);
     sensors_read();
 }
 
-static int32_t dist = SENSOR_DIST_MAX;
-
-TASK(TaskOut)
+/*
+ * This task is called each time the radar needs to move to a new position. It
+ * tells the motor to move and the sensor to send a signal.
+ */
+TASK(TaskStep)
 {
-    static bool_t keepalive = false;
+    static int sign = 1;
+    static int dist = 550;
+    static int changes = 0;
 
-    LCD_UsrLog("Right: %d ticks.\r\n", sensor_right);
-    LCD_UsrLog("Left %d ticks.\r\n", sensor_left);
-    LCD_UsrLog("Keepalive %d.\r\n", keepalive);
+    TM_DISCO_LedToggle(LED_RED);
 
-    keepalive = ! keepalive;
+    pos = motor_get_pos();
+
+    if(!start)
+    {
+        motor_step();
+        sensors_trigger();
+
+        dist = sensors_get_last_distance();
+
+        gui_set_position(pos, dist);
+    } else
+    {
+        start = false;
+        sensors_trigger();
+    }
 }
 
-TASK(TaskIncrement)
+TASK(TaskGui)
 {
-    sensors_trigger();
-    dist = sensors_get_last_distance();
+    if(TM_DISCO_ButtonOnPressed())
+        gui_change_zoom_level();
 
-    // TODO: stuff with the distance
+    gui_refresh();
 }
 
-TASK(TaskStopTrigger)
-{
-    sensors_trigger();
 
-    // TODO: stuff with the distance
+void system_init()
+{
+    SystemInit();
+    EE_system_init();
 }
 
-int main(void)
+void systick_init()
 {
-
-	/* Preconfiguration before using DAC----------------------------------------*/
-	GPIO_InitTypeDef GPIO_InitStructure;
-
-	/*
-	 * Setup the microcontroller system.
-	 * Initialize the Embedded Flash Interface, the PLL and update the
-	 * SystemFrequency variable.
-	 * For default settings look at:
-	 * pkg/mcu/st_stm32_stm32f4xx/src/system_stm32f4xx.c
-	 */
-	SystemInit();
-
-	/*Initialize Erika related stuffs*/
-	EE_system_init();
-
-	/*Initialize systick */
-	EE_systick_set_period(MICROSECONDS_TO_TICKS(SYST_PERIOD, SystemCoreClock));
-	EE_systick_enable_int();
-	EE_systick_start();
-
-	/*Initialize the LCD*/
-    STM32f4_Discovery_LCD_Init();
-    LCD_LOG_Init();
-    LCD_LOG_SetHeader("Hi ... Erika is running!");
-    LCD_LOG_SetFooter("Erika RTOS LCD log Demo");
-    LCD_UsrLog("Test-> Log Initialized!\r\n");
-    LCD_DbgLog("Test-> DBG message!\r\n");
-    LCD_ErrLog("Test-> ERR message!\r\n");
-
-	sensors_init();
-
-	/* Program cyclic alarms which will fire after an initial offset,
-	 * and after that periodically
-	 * */
-	// TODO: constants
-	SetRelAlarm(Task1Alarm, 10, MOTOR_PERIOD_TICKS);
-	SetRelAlarm(Task2Alarm, 20, MOTOR_PERIOD_TICKS);
-	SetRelAlarm(TaskOutAlarm, 100, 1000 * 1000 / SYST_PERIOD);
-
-
-	/* Forever loop: background activities (if any) should go here */
-	for (;;);
-
+    EE_systick_set_period(MILLISECONDS_TO_TICKS(1, SystemCoreClock));
+    EE_systick_enable_int();
+    EE_systick_start();
 }
 
+void arm_calibration_wait(void)
+{
+    gui_show_calibration_message();
+
+    while(!TM_DISCO_ButtonOnPressed())
+        motor_set_pos(USR_MID_POS);
+}
+
+// TODO: add tasks for sensor
+
+int main(void) {
+    system_init();
+    systick_init();
+
+    /* Initialize leds on board */
+    TM_DISCO_LedInit();
+
+    /* Initialize button on board */
+    TM_DISCO_ButtonInit();
+
+    gui_init();
+    
+    // TODO: initialize sensor
+
+    motor_init(MOTOR_MID, LEFT);
+
+    arm_calibration_wait();
+
+    motor_set_pos(USR_MIN_POS);
+
+    gui_interface_init();
+
+    SetRelAlarm(AlarmStep, 10, 20);
+
+    SetRelAlarm(AlarmGui, 20, 80);
+
+    while (1) {}
+}

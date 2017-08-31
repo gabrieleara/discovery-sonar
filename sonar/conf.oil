@@ -39,30 +39,38 @@
  * ###*E*### */
 
 /*
- * Author: 2013 Gianluca Franchino
- * 
+ * OIL FILE OF MOTOR SUB-PROJECT
+ * Author: Gabriele Serra
+ * Year: 2017
  */
 
 CPU mySystem {
 
 	OS myOs {
 		EE_OPT = "DEBUG";
-		//EE_OPT = "VERBOSE";
-		//EE_OPT = "__KEIL_4_54_OLDER__";
-		//EE_OPT = "__KEIL_USE_AXF_EXT__";
-		//LDFLAGS =" --specs=rdimon.specs -lrdimon";
 		
 		CPU_DATA = CORTEX_MX {
 			MODEL = M4;
+			
+			// Il file code.c è usato solo per i test, il
+			// vero file main del progetto sarà main.c
+			// (se ti va bene)
 			APP_SRC = "code.c";
+
 			APP_SRC = "sensor.c";
+			APP_SRC = "motor.c";
+			APP_SRC = "gui.c";
 			
+			APP_SRC = "lcd/widget.c";
+			APP_SRC = "lcd/widget_config.c";
+			APP_SRC = "res/pictures.c";
+			
+			// LIBS
 			APP_SRC = "lib/tm_stm32f4_gpio.c";
+			APP_SRC = "lib/tm_stm32f4_pwm.c";
+			APP_SRC = "lib/tm_stm32f4_timer_properties.c";
+			APP_SRC = "lib/tm_stm32f4_disco.c";
 			
-			
-			
-			
-			//COMPILER_TYPE = KEIL; 
 			COMPILER_TYPE = GNU;
 			MULTI_STACK = FALSE;
 		};
@@ -76,13 +84,34 @@ CPU mySystem {
 		
 		LIB = ENABLE { NAME = "ST_CMSIS"; };
 		
-		LIB = ENABLE { NAME = "STM32F4XX_SPD"; };
+		/*
+		LIB = ENABLE { NAME = "STM32F4XX_SPD";
+			STM32F4XX_SPD = ENABLE {
+				USETIM = TRUE;
+			};
+		};
+		* 
+		*/
+        
+        
+        LIB = ENABLE { NAME = "STM32F4XX_SPD"; 
+			STM32F4XX_SPD = ENABLE {
+				USETIM = TRUE;
+				USEGPIO = TRUE;
+				USESPI = TRUE;
+				USEEXTI = TRUE;
+				USEMISC = TRUE;
+				USEFLASH = TRUE;
+				USEI2C = TRUE;
+				USEDMA = TRUE;
+				//USEUSART = TRUE;
+				//USESYSCFG = TRUE;
+			};
+		};
 		
 		LIB = ENABLE { NAME = "STM32F4_DISCOVERY";
 			STM32F4_DISCOVERY = ENABLE {
-				USELEDS = TRUE;
 				USELCD = TRUE;
-				USELCDLOG = TRUE;
 				};
 		};
 		
@@ -97,27 +126,21 @@ CPU mySystem {
 		USERESSCHEDULER = FALSE;
 
 		KERNEL_TYPE = FP;
+	};
 
-	};
-	
-	COUNTER sysCounter;
+	COUNTER sysCount;
 
-	ALARM Task1Alarm{
-		COUNTER = sysCounter;
-		ACTION = ACTIVATETASK { TASK = TaskIncrement; };
+	ALARM AlarmStep {
+		COUNTER = sysCount;
+		ACTION = ACTIVATETASK { TASK = TaskStep; };
 	};
 	
-	ALARM Task2Alarm{
-		COUNTER = sysCounter;
-		ACTION = ACTIVATETASK { TASK = TaskIncrement; };
+	ALARM AlarmGui {
+		COUNTER = sysCount;
+		ACTION = ACTIVATETASK { TASK = TaskGui; };
 	};
 	
-	ALARM TaskOutAlarm{
-		COUNTER = sysCounter;
-		ACTION = ACTIVATETASK { TASK = TaskOut; };
-	};
-	
-	TASK TaskIncrement {
+	TASK TaskStep {
 		PRIORITY = 0x01;   /* High priority */
 		AUTOSTART = FALSE;
 		STACK = SHARED;
@@ -125,16 +148,8 @@ CPU mySystem {
 		SCHEDULE = FULL;
 	};
 	
-	TASK TaskStopTrigger {
-		PRIORITY = 0x01;   /* High priority */
-		AUTOSTART = FALSE;
-		STACK = SHARED;
-		ACTIVATION = 1;    /* only one pending activation */
-		SCHEDULE = FULL;
-	};
-	
-	TASK TaskOut {
-		PRIORITY = 0x02;   /* Slightly less priority ? */
+	TASK TaskGui {
+		PRIORITY = 0x02;   /* High priority */
 		AUTOSTART = FALSE;
 		STACK = SHARED;
 		ACTIVATION = 1;    /* only one pending activation */
