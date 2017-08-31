@@ -8,9 +8,11 @@
 #include "lib/tm_stm32f4_pwm.h"
 #include "lib/tm_stm32f4_disco.h"
 
-#include "motor.h"
+
 #include "constants.h"
 
+#include "motor.h"
+#include "sensor.h"
 #include "gui.h"
 
 
@@ -29,9 +31,7 @@ ISR2(systick_handler)
  */
 TASK(TaskStep)
 {
-    static int sign = 1;
-    static int dist = 550;
-    static int changes = 0;
+    int dist;
 
     TM_DISCO_LedToggle(LED_RED);
 
@@ -42,7 +42,7 @@ TASK(TaskStep)
         motor_step();
         sensors_trigger();
 
-        dist = sensors_get_last_distance();
+        dist = DISTANCE_TO_CM(sensors_get_last_distance());
 
         gui_set_position(pos, dist);
     } else
@@ -51,6 +51,12 @@ TASK(TaskStep)
         sensors_trigger();
     }
 }
+
+TASK(TaskStopTrigger)
+{
+    sensors_trigger();
+}
+
 
 TASK(TaskGui)
 {
@@ -69,7 +75,7 @@ void system_init()
 
 void systick_init()
 {
-    EE_systick_set_period(MILLISECONDS_TO_TICKS(1, SystemCoreClock));
+    EE_systick_set_period(MICROSECONDS_TO_TICKS(SYST_PERIOD, SystemCoreClock));
     EE_systick_enable_int();
     EE_systick_start();
 }
@@ -106,9 +112,10 @@ int main(void) {
 
     gui_interface_init();
 
-    SetRelAlarm(AlarmStep, 10, 20);
+    SetRelAlarm(AlarmStep, 10, STEP_PERIOD_TICKS);
+    SetRelAlarm(AlarmStep, 20, STEP_PERIOD_TICKS);
 
-    SetRelAlarm(AlarmGui, 20, 80);
+    SetRelAlarm(AlarmGui, 50, SCREEN_PERIOD_TICKS);
 
     while (1) {}
 }

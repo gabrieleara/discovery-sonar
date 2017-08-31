@@ -10,21 +10,22 @@
  * -----------------------------------------------------------------------------
  */
 
-#define SYST_PERIOD     (10)// Defines the systick period in microseconds
-#define MOTOR_PERIOD    (25000)
+#define SYST_PERIOD    (50) // Defines the systick period in microseconds
+#define STEP_PERIOD    (20000)
                             // Defines the interval in microseconds between one
                             // motor move and the following one, must be an
                             // integer multiple of SYST_PERIOD
 
-#define MOTOR_PERIOD_TICKS (MOTOR_PERIOD / SYST_PERIOD)
+#define SCREEN_PERIOD  (90000)
+                            // Defines the interval in microseconds between one
+                            // screen refresh and the following one, must be an
+                            // integer multiple of SYST_PERIOD
+
+#define STEP_PERIOD_TICKS (STEP_PERIOD / SYST_PERIOD)
                             // Defines the interval in number of ticks between
                             // one motor move and the following one
 
-#define MOTOR_INC   (10)    // The increment used each time we want to move
-                            // the motor at each MOTOR_PERIOD
-
-// FIXME:
-// Maximum (displayable?) distance in cm
-#define DISPLAY_DIST_MAX_CM     (400)
-
+#define SCREEN_PERIOD_TICKS (SCREEN_PERIOD / SYST_PERIOD)
+                            // Defines the interval in number of ticks between
+                            // one screen refresh and the following one
 #endif

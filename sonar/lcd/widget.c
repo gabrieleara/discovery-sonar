@@ -6,6 +6,7 @@
 #include "widget.h"
 #include "widget_config.h"
 #include "../motor.h"
+#include "../sensor.h"
 
 
 /* ---------------------------
@@ -240,8 +241,6 @@ void draw_points(widget_sonar_t* wid)
     {
         angle = motor_pos_to_angle(i);
 
-        // TODO: distance must be set in number of ticks and must be converted
-        // into screen value before displaying
         dist = wid->objects[i];
 
         if(dist > max_distance)

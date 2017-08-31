@@ -135,12 +135,25 @@ CPU mySystem {
 		ACTION = ACTIVATETASK { TASK = TaskStep; };
 	};
 	
+	ALARM AlarmStopTrigger {
+		COUNTER = sysCount;
+		ACTION = ACTIVATETASK { TASK = TaskStopTrigger; };
+	};
+	
 	ALARM AlarmGui {
 		COUNTER = sysCount;
 		ACTION = ACTIVATETASK { TASK = TaskGui; };
 	};
 	
 	TASK TaskStep {
+		PRIORITY = 0x01;   /* High priority */
+		AUTOSTART = FALSE;
+		STACK = SHARED;
+		ACTIVATION = 1;    /* only one pending activation */
+		SCHEDULE = FULL;
+	};
+	
+	TASK TaskStopTrigger {
 		PRIORITY = 0x01;   /* High priority */
 		AUTOSTART = FALSE;
 		STACK = SHARED;

@@ -26,6 +26,10 @@ typedef int16_t     int_t;      // Default integer type
 typedef uint16_t    uint_t;     // Default unsigned integer type
 typedef uint8_t     char_t;     // Default char type
 
+typedef int32_t     long_int_t; // Default long integer type, used only inside
+                                // the DISTANCE macros to calculate middle
+                                // results
+
 typedef uint_t      color_t;    // Default color type
 
 // Executes the cast of the expression expr to the type type

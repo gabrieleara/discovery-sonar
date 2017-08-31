@@ -56,8 +56,8 @@ typedef struct SENSOR_STRUCT
                                 // not
     bool_t      recording;      // Whether the sensor is waiting the end of the
                                 // echo or not
-    uint32_t    last_distance;  // Last calculated distance in number of ticks
-    uint32_t    time_counter;   // Counter used to count the number of ticks
+    int_t    last_distance;  // Last calculated distance in number of ticks
+    int_t    time_counter;   // Counter used to count the number of ticks
                                 // since last start of recording
 
     bool_t      skipped;        // Whether the last trigger has been skipped or
@@ -76,7 +76,7 @@ typedef struct SENSOR_STRUCT
 typedef struct SENSOR_STATE_STRUCT
 {
     sensor_t    sensors[2];
-    int32_t     last_distance;
+    int_t     last_distance;
 } sensor_state_t;
 
 
@@ -100,12 +100,6 @@ static sensor_state_t sensor_state =
     .last_distance = SENSOR_DIST_MAX,
     .sensors = { RESET_SENSOR, RESET_SENSOR },
 };
-
-
-// HACK:
-extern int32_t sensor_left;
-extern int32_t sensor_right;
-
 
 /* ---------------------------
  * Private functions
@@ -208,9 +202,6 @@ void update_distance()
 {
     // NOTICE: If both sensors skipped the last measurement, they both measured
     // SENSOR_DIST_MAX
-
-    sensor_left = sensor_state.sensors[SENSOR_LX].last_distance;
-    sensor_right = sensor_state.sensors[SENSOR_RX].last_distance;
 
     if(sensor_state.sensors[SENSOR_LX].skipped)
     {
@@ -331,7 +322,7 @@ static bool_t set_reset = false;
 /*
  * Returns the last calculated distance.
  * */
-int32_t sensors_get_last_distance()
+int_t sensors_get_last_distance()
 {
     return sensor_state.last_distance;
 }
