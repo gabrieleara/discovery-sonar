@@ -4,6 +4,7 @@
 #include "widget_config.h"
 #include "../constants.h"
 #include "../res/pictures.h"
+#include "../motor.h"
 
 /* ---------------------------
  * Constants
@@ -328,7 +329,7 @@ static widget_sonar_t sonar =
     .pivot_x = WID_SONAR_PIVOT_X,
     .pivot_y = WID_SONAR_PIVOT_Y,
     .pos = 0,
-    .objects = { [0 ... 170] = 45 }, // TODO: change DISPLAY_DIST_MAX_CM
+    .objects = { [0 ... USR_MAX_POS] = 113 }, // TODO: change DISPLAY_DIST_MAX_CM
 };
 
 

@@ -236,16 +236,16 @@ void draw_points(widget_sonar_t* wid)
 
     //LCD_SetTextColor(WID_COLOR_POINT);
 
-    // TODO: change to constant after pull
     for(i = USR_MIN_POS; i <= USR_MAX_POS; ++i)
     {
-        // TODO: change with zoom level
         angle = motor_pos_to_angle(i);
 
+        // TODO: distance must be set in number of ticks and must be converted
+        // into screen value before displaying
         dist = wid->objects[i];
 
         if(dist > max_distance)
-             continue;//dist = wid->max_distance; // TODO: else we show the maximum distance
+             continue;
 
         dist = dist * wid->line_length / max_distance;
 
@@ -298,6 +298,10 @@ void widget_print_num(widget_t* wid, int_t num)
     print_text(wid);
 }
 
+/*
+ * Refreshes the content of the sonar, displaying the bar at the specified user
+ * position.
+ */
 void widget_sonar_refresh(widget_t* wid, int_t pos)
 {
     widget_sonar_t* ptr;
@@ -315,7 +319,9 @@ void widget_sonar_refresh(widget_t* wid, int_t pos)
 
     draw_points(ptr);
 }
-
+/*
+ * Sets the measured distance at the given user position.
+ */
 void widget_sonar_set_object(widget_t* wid, int_t pos, int_t distance)
 {
     widget_sonar_t* ptr;
@@ -327,6 +333,10 @@ void widget_sonar_set_object(widget_t* wid, int_t pos, int_t distance)
     ptr->objects[pos] = distance;
 }
 
+/*
+ * Sets the maximum distance (in centimeters) that can be displayed. Used mainly
+ * to change zoom level.
+ */
 void widget_sonar_set_max_dist(widget_t* wid, int_t max_distance)
 {
     widget_sonar_t* ptr;

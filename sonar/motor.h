@@ -9,18 +9,7 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-// ---------------------------
-// Includes
-// ---------------------------
-
 #include "types.h"
-
-// Include core modules
-#include "ee.h"
-#include "stm32f4xx.h"
-
-// Include TM libraries
-#include "lib/tm_stm32f4_pwm.h"
 
 // ---------------------------
 // PWM motor constant
@@ -49,7 +38,7 @@
 
 #define USR_RANGE_SLOPE (((double)USR_MAX_POS-(double)USR_MIN_POS) \
 							/ (double)MOTOR_RANGE)
-// Defines the slope of user range map
+                            // Defines the slope of user range map
 
 // ------------------------
 // STM32F4 timer/pwm pinout
@@ -58,48 +47,33 @@
 #define TIMER       TIM2                // Timer to be used (on board)
 #define CHANNEL     TM_PWM_Channel_1    // Channel of pin to be used
 #define PINS_PACK   TM_PWM_PinsPack_2   // PinsPack to be used
-// --> TIM2 on GPIOA PA5
+                                        // --> TIM2 on GPIOA PA5
 
-// ---------------------------
-// Data structures and data types
-// ---------------------------
 
-typedef enum {		// Possible direction enumerator
+/* ---------------------------
+ * Data types
+ * ---------------------------
+ */
+
+
+// Possible direction enumerator
+typedef enum {
     RIGHT = -1,     // Right direction (clockwise)
     STOP,           // Halt
     LEFT,           // Left direction (counter clockwise)
 } direction_t;
 
-typedef struct {                // PWM Motor data structure
-    int_t           curr_pos;   // Motor current position
-    direction_t     curr_dir;   // Motor current direction
-    TM_PWM_TIM_t    TIM_Data;   // Motor timer data structure
-} motor;
-
-// ---------------------------
-// Functions
-// ---------------------------
-
-/*
- * Invert motor direction
- * in:	void
- * ret: void
+/* ---------------------------
+ * Public functions
+ * ---------------------------
  */
-#define motor_invert_dir() (my_motor.curr_dir *= -1)
 
 /*
  * Return the user range domain motor position
  * in:	void
  * ret: motor position in user range domain
  */
-#define motor_get_user_pos() (USR_MIN_POS + USR_RANGE_SLOPE * (my_motor.curr_pos - MOTOR_MIN))
-
-/*
- * Convert the user domain motor position in motor domain position
- * in:	void
- * ret: motor position in user range domain
- */
-extern int_t motor_get_motor_pos(int_t user_pos);
+extern int_t motor_get_pos();
 
 /*
  * Initialize motor with initial parameter

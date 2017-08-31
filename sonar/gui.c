@@ -183,33 +183,34 @@ void gui_interface_init()
  */
 void gui_refresh()
 {
+    if(gui_state.zoom_level_changed)
+    {
+        gui_state.zoom_level_changed = false;
+
+        int_t       zoom_level  = gui_state.zoom_level;
+        d_unit_t    zoom_unit   = ZOOM_LEVEL_TO_UNIT(zoom_level);
+        int_t       dist        = ZOOM_LEVEL_MAX_DISTANCE(zoom_level);
+
+        if (zoom_unit == UNIT_METER)
+            dist /= 100;
+
+        widget_print_num(&widgets[WID_DIST1], dist);
+        widget_print_num(&widgets[WID_DIST4], dist);
+
+        dist /= 2;
+
+        widget_print_num(&widgets[WID_DIST2], dist);
+        widget_print_num(&widgets[WID_DIST3], dist);
+
+        widget_print_num(&widgets[WID_ZOOM], zoom_level);
+
+        widget_print_text(&widgets[WID_UNIT], D_UNIT_TO_STRING(zoom_unit));
+
+        widget_sonar_set_max_dist(
+                &widgets[WID_SONAR],
+                ZOOM_LEVEL_MAX_DISTANCE(gui_state.zoom_level)
+                );
+    }
+
     widget_sonar_refresh(&widgets[WID_SONAR], gui_state.motor_pos);
-
-    if(!gui_state.zoom_level_changed)
-        return;
-    gui_state.zoom_level_changed = false;
-
-    int_t       zoom_level  = gui_state.zoom_level;
-    d_unit_t    zoom_unit   = ZOOM_LEVEL_TO_UNIT(zoom_level);
-    int_t       dist        = ZOOM_LEVEL_MAX_DISTANCE(zoom_level);
-
-    if (zoom_unit == UNIT_METER)
-        dist /= 100;
-
-    widget_print_num(&widgets[WID_DIST1], dist);
-    widget_print_num(&widgets[WID_DIST4], dist);
-
-    dist /= 2;
-
-    widget_print_num(&widgets[WID_DIST2], dist);
-    widget_print_num(&widgets[WID_DIST3], dist);
-
-    widget_print_num(&widgets[WID_ZOOM], zoom_level);
-
-    widget_print_text(&widgets[WID_UNIT], D_UNIT_TO_STRING(zoom_unit));
-
-    widget_sonar_set_max_dist(
-            &widgets[WID_SONAR],
-            ZOOM_LEVEL_MAX_DISTANCE(gui_state.zoom_level)
-            );
 }
