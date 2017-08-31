@@ -11,6 +11,7 @@
 // ---------------------------
 
 #include "motor.h"
+#include <math.h>
 
 // ---------------------------
 // Globals
@@ -22,7 +23,7 @@ motor my_motor;	// Motor instance
 // Functions
 // ---------------------------
 
-uint32_t motor_get_motor_pos(uint32_t user_pos) {
+int_t motor_get_motor_pos(int_t user_pos) {
 	double motor_pos;
 
 	if(user_pos < USR_MIN_POS)
@@ -33,7 +34,7 @@ uint32_t motor_get_motor_pos(uint32_t user_pos) {
 	return MOTOR_MIN + 1.0/USR_RANGE_SLOPE * (user_pos - USR_MIN_POS);
 }
 
-void motor_init(uint32_t init_user_pos, dir init_dir) {
+void motor_init(int_t init_user_pos, direction_t init_dir) {
 
 	// Set initial direction and position
 	my_motor.curr_pos = motor_get_motor_pos(init_user_pos);
@@ -49,7 +50,7 @@ void motor_init(uint32_t init_user_pos, dir init_dir) {
     TM_PWM_SetChannelMicros(&my_motor.TIM_Data, CHANNEL, my_motor.curr_pos);
 }
 
-void motor_set_pos(uint32_t user_pos) {
+void motor_set_pos(int_t user_pos) {
 
 	// Set new motor position
 	my_motor.curr_pos = motor_get_motor_pos(user_pos);
@@ -58,7 +59,7 @@ void motor_set_pos(uint32_t user_pos) {
 	TM_PWM_SetChannelMicros(&my_motor.TIM_Data, CHANNEL, my_motor.curr_pos);
 }
 
-void motor_set_dir(dir direction) {
+void motor_set_dir(direction_t direction) {
 
 	// Set new value for the motor direction (LEFT, RIGHT, STOP)
 	my_motor.curr_dir = direction;
@@ -81,10 +82,7 @@ void motor_step() {
 	TM_PWM_SetChannelMicros(&my_motor.TIM_Data, CHANNEL, my_motor.curr_pos);
 }
 
-// ---------------------------
-// Tasks
-// ---------------------------
-
-/*
- * Insert all tasks here
- * */
+double motor_pos_to_angle(int_t usr_pos)
+{
+    return STATIC_CAST(double, usr_pos-USR_MIN_POS) * M_PI / USR_RANGE;
+}

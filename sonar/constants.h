@@ -1,25 +1,14 @@
 #ifndef CONST_H
 #define CONST_H
 
+#include "types.h"
+
+#define SOFTWARE_VERSION    "0.1 alpha"
+
 /* -----------------------------------------------------------------------------
- * Emulation of the C++ standard library
+ * Constants used by all modules of the program
  * -----------------------------------------------------------------------------
  */
-
-// Defines a boolean type to be used in C
-typedef enum { false, true } bool_t;
-
-#define BOOL(expr) (!!(expr))
-
-// Executes the cast of the expression expr to the type type
-#define STATIC_CAST(type, expr) ((type)(expr))
-
-
-/* -----------------------------------------------------------------------------
- * Constants of the program
- * -----------------------------------------------------------------------------
- * */
-
 
 #define SYST_PERIOD     (10)// Defines the systick period in microseconds
 #define MOTOR_PERIOD    (20000)
@@ -34,21 +23,8 @@ typedef enum { false, true } bool_t;
 #define MOTOR_INC   (10)    // The increment used each time we want to move
                             // the motor at each MOTOR_PERIOD
 
-
-/* -----------------------------------------------------------------------------
- * MACRO FUNCTIONS
- * -----------------------------------------------------------------------------
- * */
-
-// Value of PI copied from math.h, used only to define the POSITION_TO_ANGLE
-// macro without needing to include math.h
-#define CONST_PI        (3.14159265358979323846)
-
-// Converts a motor position to a single precision floating point angle
-#define POSITION_TO_ANGLE(pos) \
-    STATIC_CAST(float, (STATIC_CAST(double, pos) / POSITION_RANGE * 2.0 * MATH_PI))
-
-// Removes the constant used to define POSITION_TO_ANGLE
-#undef CONST_PI
+// FIXME:
+// Maximum (displayable?) distance in cm
+#define DISPLAY_DIST_MAX_CM     (400)
 
 #endif

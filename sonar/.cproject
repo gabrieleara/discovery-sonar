@@ -49,6 +49,9 @@
 									<listOptionValue builtIn="false" value="&quot;${erika_enterprise_location}/contrib&quot;"/>
 									<listOptionValue builtIn="false" value="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain"/>
 									<listOptionValue builtIn="false" value="&quot;${erika_enterprise_location}/contrib/st/CMSIS/Device/ST/STM32F4xx/Include&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/share/eclipse/plugins/com.eu.evidence.ee_2.7.0.20160615_1643/ee_files/contrib/st/STM32F4-Discovery/inc"/>
+									<listOptionValue builtIn="false" value="/usr/arm-none-eabi/include"/>
+									<listOptionValue builtIn="false" value="/usr/lib/gcc/arm-none-eabi/6.3.1/include"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.479623868" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
