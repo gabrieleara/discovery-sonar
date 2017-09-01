@@ -1,11 +1,21 @@
+/*
+ * widget.c
+ *
+ * This file contains all the functions that are used to display widgets on the
+ *
+ */
+
+/* ---------------------------
+ * Includes
+ * ---------------------------
+ */
+
 #include <math.h>
 
 #include "stm32f4_discovery_lcd.h"
 
-#include "../types.h"
 #include "widget.h"
 #include "widget_config.h"
-#include "../motor.h"
 #include "../sensor.h"
 
 
@@ -90,10 +100,9 @@ void set_text(widget_t* wid, const unsigned char* str)
         return;
 
     string_cpy(ptr->string, str);
-
     ptr->string[sizeof(ptr->string)-1] = '\0'; // Just in case
-
 }
+
 
 /*
  * Prints a text widget content, if the widget is indeed a text widget.
@@ -131,7 +140,7 @@ void widget_print(widget_t* wid)
  * given text widget, if the widget is indeed a text widget and it is not
  * static.
  *
- * This functions aligns also the text depending on the alignement specified in
+ * This functions aligns also the text depending on the alignment specified in
  * the widget configuration.
  */
 void set_num_text(widget_t* wid, int_t num)
@@ -241,7 +250,7 @@ void draw_points(widget_sonar_t* wid)
     {
         angle = motor_pos_to_angle(i);
 
-        dist = wid->objects[i];
+        dist = wid->obstacles[i];
 
         if(dist > max_distance)
              continue;
@@ -318,10 +327,11 @@ void widget_sonar_refresh(widget_t* wid, int_t pos)
 
     draw_points(ptr);
 }
+
 /*
  * Sets the measured distance at the given user position.
  */
-void widget_sonar_set_object(widget_t* wid, int_t pos, int_t distance)
+void widget_sonar_set_obstacle(widget_t* wid, int_t pos, int_t distance)
 {
     widget_sonar_t* ptr;
 
@@ -329,7 +339,7 @@ void widget_sonar_set_object(widget_t* wid, int_t pos, int_t distance)
         return;
 
     ptr = STATIC_CAST(widget_sonar_t*, wid->data);
-    ptr->objects[pos] = distance;
+    ptr->obstacles[pos] = distance;
 }
 
 /*

@@ -17,12 +17,12 @@
  *
  */
 
-//#define SENSOR_DIST_MAX (41200 / SYST_PERIOD)
+#define SENSOR_DIST_MAX (41200 / SYST_PERIOD)
                     // Maximum distance in number of ticks
                     // about 7 meters
 
 // FIXME: this is a test with 3.5 meters
-#define SENSOR_DIST_MAX (20600 / SYST_PERIOD)
+//#define SENSOR_DIST_MAX (20600 / SYST_PERIOD)
 
 /* ---------------------------
  * Public functions

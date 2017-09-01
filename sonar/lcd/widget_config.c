@@ -16,7 +16,6 @@
 
 #define WID_SCREEN_X    (0)
 #define WID_SCREEN_Y    (0)
-
 #define WID_SCREEN_MX   (320)
 #define WID_SCREEN_MY   (240)
 
@@ -88,7 +87,6 @@
  *   changed.
  */
 
-
 // They start all at the same y, different x
 #define WID_DIST_Y      (WID_SCREEN_MY / 2 + 28)
 #define WID_DIST1_X     (8)
@@ -106,11 +104,6 @@
  */
 #define WID_ZOOM_X      (WID_ZOOM_LABEL_X + 8)
 #define WID_ZOOM_Y      (WID_ZOOM_LABEL2_Y + 32)
-/*
- * The background of this indicator spans these positions:
- * x = 274      y = 60
- * width = 32   height = 48
- */
 #define WID_ZOOM_W      (32)        // NOTE: it depends on the font
 #define WID_ZOOM_H      (48)        // NOTE: it depends on the font
 
@@ -122,12 +115,6 @@
  */
 #define WID_UNIT_X    (WID_UNIT_LABEL_X + 4)
 #define WID_UNIT_Y    (WID_UNIT_LABEL2_Y + 24)
-
-/*
- * The background of this indicator spans these positions:
- * x = 270      y = 184
- * width = 40   height = 24
- */
 #define WID_UNIT_W    (40)   // NOTE: it depends on the font
 #define WID_UNIT_H    (24)   // NOTE: it depends on the font
 
@@ -140,10 +127,6 @@
 
 /*
  * Sonar indicator, it shows the identified objects.
- *
- * The background of the sonar spans these positions:
- * x = 10       y = 10
- * width = 234  height = 122
  */
 #define WID_SONAR_X    (10)
 #define WID_SONAR_Y    (10)
@@ -330,7 +313,7 @@ static widget_sonar_t sonar =
     .pivot_x = WID_SONAR_PIVOT_X,
     .pivot_y = WID_SONAR_PIVOT_Y,
     .pos = 0,
-    .objects = { [0 ... USR_MAX_POS] = DISTANCE_TO_CM(SENSOR_DIST_MAX) },
+    .obstacles = { [0 ... USR_MAX_POS] = DISTANCE_TO_CM(SENSOR_DIST_MAX) },
 };
 
 

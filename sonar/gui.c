@@ -15,7 +15,6 @@
 
 #include "stm32f4_discovery_lcd.h"
 
-#include "constants.h"
 #include "lcd/widget_config.h"
 #include "lcd/widget.h"
 #include "gui.h"
@@ -147,7 +146,7 @@ void gui_set_position(int_t pos, int_t distance)
 {
     gui_state.motor_pos = pos;
 
-    widget_sonar_set_object(&widgets[WID_SONAR], pos, distance);
+    widget_sonar_set_obstacle(&widgets[WID_SONAR], pos, distance);
 }
 
 /*

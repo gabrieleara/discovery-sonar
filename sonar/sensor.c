@@ -251,6 +251,10 @@ void update_distance()
     {
         sensor_state.last_distance =
                 sensor_state.sensors[SENSOR_RX].last_distance;
+
+        if(sensor_state.last_distance > SENSOR_DIST_MAX)
+                sensor_state.last_distance = SENSOR_DIST_MAX;
+
         return;
     }
 
@@ -258,12 +262,19 @@ void update_distance()
     {
         sensor_state.last_distance =
                 sensor_state.sensors[SENSOR_LX].last_distance;
+
+        if(sensor_state.last_distance > SENSOR_DIST_MAX)
+                sensor_state.last_distance = SENSOR_DIST_MAX;
+
         return;
     }
 
     // FIXME: check if simple average is a good approximation
     sensor_state.last_distance = (sensor_state.sensors[SENSOR_LX].last_distance
             + sensor_state.sensors[SENSOR_RX].last_distance) / 2;
+
+    if(sensor_state.last_distance > SENSOR_DIST_MAX)
+        sensor_state.last_distance = SENSOR_DIST_MAX;
 }
 
 /* ---------------------------

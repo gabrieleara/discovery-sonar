@@ -11,7 +11,7 @@
 
 #include "fonts.h"
 #include "../types.h"
-#include "../motor.h" // TODO: move to constants?
+#include "../motor.h"
 
 /* ---------------------------
  * Data types
@@ -82,7 +82,7 @@ typedef struct WID_SONAR_STRUCT
     const int_t pivot_y;
     int_t       pos;
     int_t       max_distance;
-    int_t       objects[USR_MAX_POS+1];
+    int_t       obstacles[USR_MAX_POS+1];
 } widget_sonar_t;
 
 
@@ -123,7 +123,7 @@ extern void widget_sonar_refresh(widget_t* wid, int_t pos);
 /*
  * Sets the measured distance at the given user position.
  */
-extern void widget_sonar_set_object(widget_t* wid, int_t pos, int_t distance);
+extern void widget_sonar_set_obstacle(widget_t* wid, int_t pos, int_t distance);
 
 /*
  * Sets the maximum distance (in centimeters) that can be displayed. Used mainly

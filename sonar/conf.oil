@@ -52,9 +52,6 @@ CPU mySystem {
 		CPU_DATA = CORTEX_MX {
 			MODEL = M4;
 			
-			// Il file code.c è usato solo per i test, il
-			// vero file main del progetto sarà main.c
-			// (se ti va bene)
 			APP_SRC = "code.c";
 
 			APP_SRC = "sensor.c";
