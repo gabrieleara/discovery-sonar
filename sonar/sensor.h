@@ -21,8 +21,8 @@
                     // Maximum distance in number of ticks
                     // about 7 meters
 
-// FIXME: this is a test with 3.5 meters
-//#define SENSOR_DIST_MAX (20600 / SYST_PERIOD)
+// FIXME: this is a test with 5 meters
+//#define SENSOR_DIST_MAX (29430 / SYST_PERIOD)
 
 /* ---------------------------
  * Public functions
@@ -37,10 +37,15 @@ extern void sensors_init();
 extern void sensors_read();
 
 /*
- * Sends/stops the trigger signal. At the moment of sending the trigger it also
+ * Sends the trigger signal. At the moment of sending the trigger it also
  * updates the global calculated distance at the previous step.
- * */
-extern void sensors_trigger();
+ */
+extern void sensors_send_trigger();
+
+/*
+ * Stops the trigger signal.
+ */
+extern void sensors_stop_trigger();
 
 /*
  * Returns the last calculated distance.

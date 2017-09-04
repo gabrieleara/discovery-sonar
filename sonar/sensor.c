@@ -22,23 +22,29 @@
  */
 
 // Defines the GPIO ports and pins used to send trigger signals and reach echos
-#define SENSOR_LX_TRIG_PORT     (GPIOE)
-#define SENSOR_LX_TRIG_PIN      (GPIO_Pin_6)
+#define SENSOR_LX_TRIG_PORT     (GPIOA)
+#define SENSOR_LX_TRIG_PIN      (GPIO_Pin_7)
 
-#define SENSOR_RX_TRIG_PORT     (GPIOE)
-#define SENSOR_RX_TRIG_PIN      (GPIO_Pin_4)
+#define SENSOR_RX_TRIG_PORT     (GPIOB)
+#define SENSOR_RX_TRIG_PIN      (GPIO_Pin_15)
 
-#define SENSOR_LX_ECHO_PORT     (GPIOE)
-#define SENSOR_LX_ECHO_PIN      (GPIO_Pin_2)
+#define SENSOR_LX_ECHO_PORT     (GPIOA)
+#define SENSOR_LX_ECHO_PIN      (GPIO_Pin_5)
 
-#define SENSOR_RX_ECHO_PORT     (GPIOE)
-#define SENSOR_RX_ECHO_PIN      (GPIO_Pin_5)
+#define SENSOR_RX_ECHO_PORT     (GPIOB)
+#define SENSOR_RX_ECHO_PIN      (GPIO_Pin_13)
 
-// Undefine or set to zero this to use two different ports for the triggers
-#define SENSOR_TRIG_SAME_PORT   1
 
-// Undefine or set to zero this to use two different ports for the echoes
-#define SENSOR_ECHO_SAME_PORT   1
+#define SENSORS_SEPARATION_CM   (3.4)   // The separation between the two
+                                        // sensors in cm, used by the
+                                        // triangolation approximation
+#define SENSORS_SEPARATION      (SENSORS_SEPARATION_CM * 2 * 10000 / 340 / SYST_PERIOD)
+                                        // The separation between the two
+                                        // sensors in number of ticks, used by
+                                        // the triangolation approximation
+
+#define SENSORS_MARGIN          (0.8)   // The margin under which two objects
+                                        // are considered to be the same
 
 /* ---------------------------
  * Data types
@@ -162,17 +168,6 @@ void read_sensor(sensor_t* sensor)
  * */
 void send_trigger()
 {
-#if SENSOR_TRIG_SAME_PORT
-    if(sensor_state.sensors[SENSOR_LX].echo_state != SENSOR_ECHO_LONG &&
-            sensor_state.sensors[SENSOR_RX].echo_state != SENSOR_ECHO_LONG)
-    {
-        TM_GPIO_SetPinHigh(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN | SENSOR_RX_TRIG_PIN);
-        sensor_state.sensors[SENSOR_LX].trig_sent =
-                        sensor_state.sensors[SENSOR_RX].trig_sent = true;
-        return;
-    }
-#endif
-
     if(sensor_state.sensors[SENSOR_LX].echo_state != SENSOR_ECHO_LONG)
     {
         TM_GPIO_SetPinHigh(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN);
@@ -188,19 +183,6 @@ void send_trigger()
     }
     else
         sensor_state.sensors[SENSOR_RX].trig_sent = false;
-}
-
-/*
- * Stops the trigger signal to both sensors.
- * */
-void stop_trigger()
-{
-#if SENSOR_TRIG_SAME_PORT
-    TM_GPIO_SetPinLow(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN | SENSOR_RX_TRIG_PIN);
-#else
-    TM_GPIO_SetPinLow(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN);
-    TM_GPIO_SetPinLow(SENSOR_RX_TRIG_PORT, SENSOR_RX_TRIG_PIN);
-#endif
 }
 
 /*
@@ -269,12 +251,27 @@ void update_distance()
         return;
     }
 
-    // FIXME: check if simple average is a good approximation
-    sensor_state.last_distance = (sensor_state.sensors[SENSOR_LX].last_distance
-            + sensor_state.sensors[SENSOR_RX].last_distance) / 2;
+    int_t dist_lx = sensor_state.sensors[SENSOR_LX].last_distance;
+    int_t dist_rx = sensor_state.sensors[SENSOR_RX].last_distance;
 
-    if(sensor_state.last_distance > SENSOR_DIST_MAX)
+    // FIXME: check if this is a good approximation
+    if(dist_lx >= SENSOR_DIST_MAX && dist_rx >= SENSOR_DIST_MAX )
+    {
+        // No objects in sight
         sensor_state.last_distance = SENSOR_DIST_MAX;
+    } else
+    {
+        // At least one object is in sight
+        if (abs(dist_lx-dist_rx)> SENSORS_SEPARATION*SENSORS_MARGIN)
+        {
+            // There are multiple objects in sight
+            sensor_state.last_distance = (dist_lx < dist_rx) ? dist_lx : dist_rx;
+        } else
+        {
+            // There is only a single object in sight
+            sensor_state.last_distance = (dist_lx + dist_rx) / 2;
+        }
+    }
 }
 
 /* ---------------------------
@@ -292,14 +289,6 @@ void sensors_init()
     sensor_state.sensors[SENSOR_RX].echo_pin    = SENSOR_RX_ECHO_PIN;
 
     // Ports and pins initialization
-#if SENSOR_TRIG_SAME_PORT
-    TM_GPIO_Init(SENSOR_LX_TRIG_PORT,
-            SENSOR_LX_TRIG_PIN | SENSOR_RX_TRIG_PIN,
-            TM_GPIO_Mode_OUT,
-            TM_GPIO_OType_PP,
-            TM_GPIO_PuPd_NOPULL,
-            TM_GPIO_Speed_High);
-#else
     TM_GPIO_Init(SENSOR_LX_TRIG_PORT,
                 SENSOR_LX_TRIG_PIN,
                 TM_GPIO_Mode_OUT,
@@ -313,16 +302,7 @@ void sensors_init()
                 TM_GPIO_OType_PP,
                 TM_GPIO_PuPd_NOPULL,
                 TM_GPIO_Speed_High);
-#endif
 
-#if SENSOR_ECHO_SAME_PORT
-    TM_GPIO_Init(SENSOR_LX_ECHO_PORT,
-            SENSOR_LX_ECHO_PIN | SENSOR_RX_ECHO_PIN,
-            TM_GPIO_Mode_IN,
-            TM_GPIO_OType_PP,
-            TM_GPIO_PuPd_NOPULL,
-            TM_GPIO_Speed_High);
-#else
     TM_GPIO_Init(SENSOR_LX_ECHO_PORT,
                 SENSOR_LX_ECHO_PIN,
                 TM_GPIO_Mode_IN,
@@ -336,7 +316,6 @@ void sensors_init()
                 TM_GPIO_OType_PP,
                 TM_GPIO_PuPd_NOPULL,
                 TM_GPIO_Speed_High);
-#endif
 }
 
 /*
@@ -349,26 +328,27 @@ void sensors_read()
 }
 
 /*
- * Sends/stops the trigger signal. At the moment of sending the trigger it also
+ * Sends the trigger signal. At the moment of sending the trigger it also
  * updates the global calculated distance at the previous step.
- * */
-void sensors_trigger()
+ */
+void sensors_send_trigger()
 {
-static bool_t set_reset = false;
+    check_finished(&sensor_state.sensors[SENSOR_LX]);
+    check_finished(&sensor_state.sensors[SENSOR_RX]);
 
-    if(set_reset)
-    {
-        check_finished(&sensor_state.sensors[SENSOR_LX]);
-        check_finished(&sensor_state.sensors[SENSOR_RX]);
+    update_distance();
 
-        update_distance();
+    send_trigger();
+}
 
-        send_trigger();
-    }
-    else
-        stop_trigger();
+/*
+ * Stops the trigger signal.
+ */
+void sensors_stop_trigger()
+{
+    TM_GPIO_SetPinLow(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN);
+    TM_GPIO_SetPinLow(SENSOR_RX_TRIG_PORT, SENSOR_RX_TRIG_PIN);
 
-    set_reset = !set_reset;
 }
 
 /*

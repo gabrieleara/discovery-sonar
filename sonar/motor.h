@@ -16,10 +16,11 @@
 // ---------------------------
 
 #define MOTOR_FRQ   (50)    // Defines the motor working frequency (Mhz)
-#define MOTOR_STP   (10)    // Defines the minimum step amplitude
-#define MOTOR_MIN   (550)   // Defines the min position of the motor (+90°)
-#define MOTOR_MAX   (2250)  // Defines the max position of the motor (-90°)
-#define MOTOR_MID	((MOTOR_MAX-MOTOR_MIN)/2 + MOTOR_MIN)
+#define MOTOR_STP   (25)    // Defines the minimum step amplitude
+#define MOTOR_MIN   (700)   // Defines the min position of the motor (+90°)
+#define MOTOR_MAX   (2400)  // Defines the max position of the motor (-90°)
+#define MOTOR_MID   ((MOTOR_MAX-MOTOR_MIN)/2 + MOTOR_MIN)
+
                             // Defines the mid position of the motor (0°)
 #define MOTOR_RANGE (MOTOR_MAX-MOTOR_MIN)
                             // The range of the positions of the motor
@@ -44,10 +45,10 @@
 // STM32F4 timer/pwm pinout
 // ------------------------
 
-#define TIMER       TIM2                // Timer to be used (on board)
-#define CHANNEL     TM_PWM_Channel_1    // Channel of pin to be used
-#define PINS_PACK   TM_PWM_PinsPack_2   // PinsPack to be used
-                                        // --> TIM2 on GPIOA PA5
+#define TIMER       TIM5                // Timer to be used (on board)
+#define CHANNEL     TM_PWM_Channel_2    // Channel of pin to be used
+#define PINS_PACK   TM_PWM_PinsPack_1   // PinsPack to be used
+                                        // --> TIM5 on GPIOA PA1
 
 
 /* ---------------------------

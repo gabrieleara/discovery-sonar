@@ -54,7 +54,7 @@ TASK(TaskStep)
     if(started)
     {
         motor_step();
-        sensors_trigger();
+        sensors_send_trigger();
 
         dist = DISTANCE_TO_CM(sensors_get_last_distance());
 
@@ -62,7 +62,7 @@ TASK(TaskStep)
     } else
     {
         started = true;
-        sensors_trigger();
+        sensors_send_trigger();
     }
 }
 
@@ -71,7 +71,7 @@ TASK(TaskStep)
  */
 TASK(TaskStopTrigger)
 {
-    sensors_trigger();
+    sensors_stop_trigger();
 }
 
 /*
@@ -145,8 +145,8 @@ int main(void) {
     gui_interface_init();
 
     // Set alarms to trigger tasks activation
-    SetRelAlarm(AlarmStep, 10, STEP_PERIOD_TICKS);
-    SetRelAlarm(AlarmStep, 20, STEP_PERIOD_TICKS);
+    SetRelAlarm(AlarmStep, 100, STEP_PERIOD_TICKS);
+    SetRelAlarm(AlarmStopTrigger, 110, STEP_PERIOD_TICKS);
     SetRelAlarm(AlarmGui, 50, SCREEN_PERIOD_TICKS);
 
     // Forever loop
