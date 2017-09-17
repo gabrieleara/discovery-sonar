@@ -151,5 +151,5 @@ int_t motor_get_pos()
  * Converts a user position to the corresponding angle in radians.
  */
 double motor_pos_to_angle(int_t usr_pos) {
-    return STATIC_CAST(double, usr_pos-USR_MIN_POS) * M_PI / USR_RANGE;
+    return STATIC_CAST(double, USR_MAX_POS - usr_pos /*+ USR_MIN_POS*/) * M_PI / USR_RANGE;
 }

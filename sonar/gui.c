@@ -34,7 +34,7 @@
  * They shall be:
  * - divisible by 2;
  * - integer;
- * - no more than 3 digits long,
+ * - no more than 3 digits long;
  * - no more than 10.
  */
 static const int_t _gui_max_distance[] =

@@ -11,6 +11,8 @@
  * ---------------------------
  */
 
+#include <stdlib.h>
+
 #include "lib/tm_stm32f4_gpio.h"
 
 #include "constants.h"

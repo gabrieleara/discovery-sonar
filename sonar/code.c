@@ -118,8 +118,10 @@ void arm_calibration_wait(void)
 {
     gui_show_calibration_message();
 
+    motor_set_pos(USR_MID_POS);
+
     while(!TM_DISCO_ButtonOnPressed())
-        motor_set_pos(USR_MID_POS);
+        ;
 }
 
 int main(void) {
