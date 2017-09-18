@@ -15,10 +15,10 @@
 // PWM motor constant
 // ---------------------------
 
-#define MOTOR_FRQ   (50)    // Defines the motor working frequency (Mhz)
+#define MOTOR_FRQ   (50)    // Defines the motor working frequency (hz)
 #define MOTOR_STP   (25)    // Defines the minimum step amplitude
 #define MOTOR_MIN   (700)   // Defines the min position of the motor (+90°)
-#define MOTOR_MAX   (2400)  // Defines the max position of the motor (-90°)
+#define MOTOR_MAX   (2300)  // Defines the max position of the motor (-90°)
 #define MOTOR_MID   ((MOTOR_MAX-MOTOR_MIN)/2 + MOTOR_MIN)
 
                             // Defines the mid position of the motor (0°)

@@ -22,7 +22,7 @@
                     // about 7 meters
 
 // FIXME: this is a test with 5 meters
-//#define SENSOR_DIST_MAX (29430 / SYST_PERIOD)
+// #define SENSOR_DIST_MAX (29430 / SYST_PERIOD)
 
 /* ---------------------------
  * Public functions

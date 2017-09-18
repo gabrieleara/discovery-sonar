@@ -85,9 +85,6 @@ typedef struct SENSOR_STRUCT
     sensor_echo_state_t echo_state;
                                 // See the previous type definition
 
-    bool_t      previous_value; // The previous value of the echo, to check
-                                // whether a rising edge arrived
-
     port_t*     echo_port;      // Echo port identifier
     pin_t       echo_pin;       // Echo pin identifier
 } sensor_t;
@@ -228,27 +225,35 @@ void check_finished(sensor_t* sensor)
  */
 void update_distance()
 {
+    int_t distance;
+
     // NOTICE: If both sensors skipped the last measurement, they both measured
     // SENSOR_DIST_MAX
 
     if(sensor_state.sensors[SENSOR_LX].echo_state != SENSOR_ECHO_OK)
     {
-        sensor_state.last_distance =
+        distance =
                 sensor_state.sensors[SENSOR_RX].last_distance;
 
-        if(sensor_state.last_distance > SENSOR_DIST_MAX)
-                sensor_state.last_distance = SENSOR_DIST_MAX;
+        if(distance > SENSOR_DIST_MAX)
+                distance = SENSOR_DIST_MAX;
+
+        sensor_state.last_distance = 0.8*distance +
+                0.2*sensor_state.last_distance;
 
         return;
     }
 
     if(sensor_state.sensors[SENSOR_RX].echo_state != SENSOR_ECHO_OK)
     {
-        sensor_state.last_distance =
+        distance =
                 sensor_state.sensors[SENSOR_LX].last_distance;
 
-        if(sensor_state.last_distance > SENSOR_DIST_MAX)
-                sensor_state.last_distance = SENSOR_DIST_MAX;
+        if(distance > SENSOR_DIST_MAX)
+                distance = SENSOR_DIST_MAX;
+
+        sensor_state.last_distance = 0.8*distance +
+                        0.2*sensor_state.last_distance;
 
         return;
     }
@@ -260,20 +265,23 @@ void update_distance()
     if(dist_lx >= SENSOR_DIST_MAX && dist_rx >= SENSOR_DIST_MAX )
     {
         // No objects in sight
-        sensor_state.last_distance = SENSOR_DIST_MAX;
+        distance = SENSOR_DIST_MAX;
     } else
     {
         // At least one object is in sight
         if (abs(dist_lx-dist_rx)> SENSORS_SEPARATION*SENSORS_MARGIN)
         {
             // There are multiple objects in sight
-            sensor_state.last_distance = (dist_lx < dist_rx) ? dist_lx : dist_rx;
+            distance = (dist_lx < dist_rx) ? dist_lx : dist_rx;
         } else
         {
             // There is only a single object in sight
-            sensor_state.last_distance = (dist_lx + dist_rx) / 2;
+            distance = (dist_lx + dist_rx) / 2;
         }
     }
+
+    sensor_state.last_distance = 0.8*distance +
+                    0.2*sensor_state.last_distance;
 }
 
 /* ---------------------------

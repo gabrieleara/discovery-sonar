@@ -11,7 +11,7 @@
  */
 
 #define SYST_PERIOD    (50) // Defines the systick period in microseconds
-#define STEP_PERIOD    (45000)
+#define STEP_PERIOD    (70000)
                             // Defines the interval in microseconds between one
                             // motor move and the following one, must be an
                             // integer multiple of SYST_PERIOD

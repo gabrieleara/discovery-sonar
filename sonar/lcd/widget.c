@@ -53,7 +53,7 @@ int_t num_digits(int_t num)
  * Simple replacement for the standard strcpy function, to avoid including
  * string.h.
  */
-void string_cpy(unsigned char* dest, const unsigned char* src)
+void string_cpy(char_t* dest, const char_t* src)
 {
     int_t i = 0;
     do
@@ -66,10 +66,10 @@ void string_cpy(unsigned char* dest, const unsigned char* src)
 /*
  * Shifts a string to the right by one place, by inserting spaces on the left.
  */
-void string_shift(unsigned char* dest)
+void string_shift(char_t* dest)
 {
-    unsigned char buf;
-    unsigned char prev = ' ';
+    char_t buf;
+    char_t prev = ' ';
     int_t i;
     for(i = 0; prev != '\0'; ++i)
     {
@@ -84,7 +84,7 @@ void string_shift(unsigned char* dest)
  * Sets the text of a text widget, if the widget is indeed a text widget and is
  * not static.
  */
-void set_text(widget_t* wid, const unsigned char* str)
+void set_text(widget_t* wid, const char_t* str)
 {
     widget_text_t* ptr;
 
@@ -290,7 +290,7 @@ void widget_draw_background(widget_t* wid)
  * Prints a text in the given widget. If the string is NULL or the widget is
  * static, prints the content of the widget.
  */
-void widget_print_text(widget_t* wid, const unsigned char* str)
+void widget_print_text(widget_t* wid, const char_t* str)
 {
     set_text(wid, str);
     print_text(wid);

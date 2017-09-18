@@ -12,7 +12,6 @@
 #include <math.h>
 
 #include "ee.h"
-//#include "stm32f4xx.h"
 
 #include "lib/tm_stm32f4_pwm.h"
 
@@ -30,14 +29,14 @@ typedef struct {
     int_t           curr_pos;   // Motor current position
     direction_t     curr_dir;   // Motor current direction
     TM_PWM_TIM_t    TIM_Data;   // Motor timer data structure
-} motor;
+} motor_t;
 
 /* ---------------------------
  * Globals
  * ---------------------------
  */
 
-motor motor_state;      // Motor instance
+motor_t motor_state;      // Motor instance
 
 /* ---------------------------
  * Private functions
