@@ -385,7 +385,7 @@ int main(int argc, char* argv[])
 
 
     // Running all the tests
-    CU_set_output_filename("results/Sonar-Test");
+    CU_set_output_filename("res-unit/Sonar-Test");
     CU_automated_run_tests();
     CU_list_tests_to_file();
 
