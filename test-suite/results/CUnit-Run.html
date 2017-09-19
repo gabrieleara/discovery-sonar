@@ -1,0 +1,505 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> CUnit - Automated Test Run Summary Report </title>
+</head>
+<body bgcolor="#e0e0f0">
+  <div align="center"><h3>
+<b> CUnit - A Unit testing framework for C. </b><br><a href="http://cunit.sourceforge.net/"> http://cunit.sourceforge.net/ </a>
+</h3></div>
+  <p></p>
+<div align="center"><h2> Automated Test Run Results </h2></div>
+<table cols="4" width="90%" align="center">
+<tbody><tr>
+<td width="25%"></td>
+<td width="25%"></td>
+<td width="25%"></td>
+<td width="25%"></td>
+</tr>
+
+      <tr bgcolor="#f0e0f0"><td colspan="4">
+				Running Suite  FSM Conformance Test </td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             State NEXT_OK Conformance Test
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             State OK      Conformance Test
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             State LOST    Conformance Test
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             State LONG    Conformance Test
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+
+
+      <tr bgcolor="#f0e0f0"><td colspan="4">
+				Running Suite  Original Triangolation Functional Testing </td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Nominal Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Boundary Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 162 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_ROBUSTNESS_MIN, RX_NOMINAL),LX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 166 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_NOMINAL, RX_ROBUSTNESS_MIN),RX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Worst-Case Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 206 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_ROBUSTNESS_MAX, RX_ROBUSTNESS_MIN),RX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 209 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_MAX, RX_ROBUSTNESS_MIN),RX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 210 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_BOUNDARY_MAX, RX_ROBUSTNESS_MIN),RX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 213 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_ROBUSTNESS_MIN, RX_ROBUSTNESS_MAX),LX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 214 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_ROBUSTNESS_MIN, RX_MAX),LX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 215 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_ROBUSTNESS_MIN, RX_BOUNDARY_MAX),LX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 220 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_ROBUSTNESS_MIN, RX_ROBUSTNESS_MIN),LX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 221 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_ROBUSTNESS_MIN, RX_MIN),LX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 222 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_ROBUSTNESS_MIN, RX_BOUNDARY_MIN),LX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 223 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_MIN, RX_ROBUSTNESS_MIN),LX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test  Worst-Case Robustness Testing ...
+			</td>
+<td bgcolor="#ff5050"> Failed </td>
+</tr>
+<tr><td colspan="4" bgcolor="#ff9090"><table width="100%">
+<tbody><tr>
+<th width="15%"> File Name </th>
+<td width="50%" bgcolor="#e0eee0"> src/main.c </td>
+<th width="20%"> Line Number </th>
+<td width="10%" bgcolor="#e0eee0"> 224 </td>
+</tr>
+<tr>
+<th width="15%"> Condition </th>
+<td colspan="3" width="85%" bgcolor="#e0eee0"> CU_ASSERT_EQUAL(triangolation_original(LX_BOUNDARY_MIN, RX_ROBUSTNESS_MIN),RX_MIN) </td>
+</tr>
+</tbody></table></td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Random Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+
+
+      <tr bgcolor="#f0e0f0"><td colspan="4">
+				Running Suite  Fixed Triangolation Functional Testing </td></tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Nominal Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Boundary Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Robustness Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Worst-Case Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Worst-Case Robustness Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+          <tr bgcolor="#e0f0d0">
+<td></td>
+<td colspan="2">
+				Running test
+             Random Testing
+          ...
+			</td>
+<td bgcolor="#50ff50"> Passed </td>
+</tr>
+
+
+
+  </tbody></table>
+  <p></p>
+<table width="90%" rows="5" align="center">
+<tbody><tr align="center" bgcolor="skyblue"><th colspan="6"> Cumulative Summary for Run </th></tr>
+<tr>
+<th width="15%" bgcolor="#ffffc0" align="center"> Type </th>
+<th width="17%" bgcolor="#ffffc0" align="center"> Total </th>
+<th width="17%" bgcolor="#ffffc0" align="center"> Run </th>
+<th width="17%" bgcolor="#ffffc0" align="center"> Succeeded </th>
+<th width="17%" bgcolor="#ffffc0" align="center"> Failed </th>
+<th width="17%" bgcolor="#ffffc0" align="center"> Inactive </th>
+</tr>
+<tr align="center" bgcolor="lightgreen">
+<td> Suites </td>
+<td> 3 </td>
+<td> 3 </td>
+<td> - NA - </td>
+<td> 0 </td>
+<td> 0 </td>
+</tr>
+<tr align="center" bgcolor="lightgreen">
+<td> Test Cases </td>
+<td> 16 </td>
+<td> 16 </td>
+<td> 14 </td>
+<td> 2 </td>
+<td> 0 </td>
+</tr>
+<tr align="center" bgcolor="lightgreen">
+<td> Assertions </td>
+<td> 134 </td>
+<td> 134 </td>
+<td> 121 </td>
+<td> 13 </td>
+<td> n/a </td>
+</tr>
+</tbody></table>
+  <p></p>
+<hr align="center" width="90%" color="maroon">
+<h5 align="center"> File Generated By CUnit v2.1-3 - Tue Sep 19 12:03:44 2017
+ </h5>
+
+</body></html>
