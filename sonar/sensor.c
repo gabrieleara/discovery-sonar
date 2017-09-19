@@ -232,6 +232,12 @@ int_t triangolation(int_t dist_lx, int_t dist_rx)
 {
     int_t distance;
 
+    if(dist_lx < 0)
+        dist_lx = 0;
+
+    if(dist_rx < 0)
+        dist_rx = 0;
+
     if(dist_lx >= SENSOR_DIST_MAX && dist_rx >= SENSOR_DIST_MAX )
     {
         // No objects in sight
