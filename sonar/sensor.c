@@ -63,13 +63,13 @@ enum sensor_id { SENSOR_LX = 0, SENSOR_RX = 1 };
  */
 typedef enum
 {
-    SENSOR_ECHO_OK = 0,         // Everything works as expected
-    SENSOR_ECHO_LOST,           // No echo arrived
-    SENSOR_ECHO_LONG,           // Echo is taking too long to complete
-    SENSOR_ECHO_NEXT_OK,        // The previous echo value was not ok, but the
-                                // following one will be hopefully good
-} sensor_echo_state_t;
+    SENSOR_ECHO_NEXT_OK = 0,// The previous echo value was not ok, but the
+                            // following one will be hopefully good
+    SENSOR_ECHO_OK,         // Everything works as expected
+    SENSOR_ECHO_LOST,       // No echo arrived
+    SENSOR_ECHO_LONG,       // Echo is taking too long to complete
 
+} sensor_echo_state_t;
 
 
 typedef struct SENSOR_STRUCT
@@ -191,6 +191,10 @@ void send_trigger()
  * */
 void check_finished(sensor_t* sensor)
 {
+    // Since in state SENSOR_ECHO_LONG trig_sent cannot be true
+    if(sensor->echo_state == SENSOR_ECHO_LONG)
+        sensor->trig_sent = false;
+
     if(sensor->recording)
     {
         // Echo is taking too long to complete
@@ -221,47 +225,13 @@ void check_finished(sensor_t* sensor)
 }
 
 /*
- * Updates the distance based on the values read by both sensors.
+ * Calculates the current distance measured by the system based
+ * on the two distances measured by each sensor.
  */
-void update_distance()
+int_t triangolation(int_t dist_lx, int_t dist_rx)
 {
     int_t distance;
 
-    // NOTICE: If both sensors skipped the last measurement, they both measured
-    // SENSOR_DIST_MAX
-
-    if(sensor_state.sensors[SENSOR_LX].echo_state != SENSOR_ECHO_OK)
-    {
-        distance =
-                sensor_state.sensors[SENSOR_RX].last_distance;
-
-        if(distance > SENSOR_DIST_MAX)
-                distance = SENSOR_DIST_MAX;
-
-        sensor_state.last_distance = 0.8*distance +
-                0.2*sensor_state.last_distance;
-
-        return;
-    }
-
-    if(sensor_state.sensors[SENSOR_RX].echo_state != SENSOR_ECHO_OK)
-    {
-        distance =
-                sensor_state.sensors[SENSOR_LX].last_distance;
-
-        if(distance > SENSOR_DIST_MAX)
-                distance = SENSOR_DIST_MAX;
-
-        sensor_state.last_distance = 0.8*distance +
-                        0.2*sensor_state.last_distance;
-
-        return;
-    }
-
-    int_t dist_lx = sensor_state.sensors[SENSOR_LX].last_distance;
-    int_t dist_rx = sensor_state.sensors[SENSOR_RX].last_distance;
-
-    // FIXME: check if this is a good approximation
     if(dist_lx >= SENSOR_DIST_MAX && dist_rx >= SENSOR_DIST_MAX )
     {
         // No objects in sight
@@ -280,8 +250,43 @@ void update_distance()
         }
     }
 
-    sensor_state.last_distance = 0.8*distance +
-                    0.2*sensor_state.last_distance;
+    return distance;
+}
+
+/*
+ * Calculates the current distance measured by the system based
+ * on the two sensors states and their measured distances.
+ */
+int_t current_distance()
+{
+    int_t distance;
+
+    // NOTICE: If both sensors skipped the last measurement, they both measured
+    // SENSOR_DIST_MAX
+
+    if(sensor_state.sensors[SENSOR_LX].echo_state != SENSOR_ECHO_OK)
+    {
+        distance = sensor_state.sensors[SENSOR_RX].last_distance;
+        return distance > SENSOR_DIST_MAX ? SENSOR_DIST_MAX : distance;
+    }
+
+    if(sensor_state.sensors[SENSOR_RX].echo_state != SENSOR_ECHO_OK)
+    {
+        distance = sensor_state.sensors[SENSOR_LX].last_distance;
+        return distance > SENSOR_DIST_MAX ? SENSOR_DIST_MAX : distance;
+    }
+
+    return triangolation(sensor_state.sensors[SENSOR_LX].last_distance,
+            sensor_state.sensors[SENSOR_RX].last_distance);
+}
+
+/*
+ * Updates the distance based on the values read by both sensors.
+ */
+void update_distance()
+{
+    sensor_state.last_distance = SENSORS_MARGIN*current_distance() +
+            (1-SENSORS_MARGIN)*sensor_state.last_distance;
 }
 
 /* ---------------------------
@@ -358,7 +363,6 @@ void sensors_stop_trigger()
 {
     TM_GPIO_SetPinLow(SENSOR_LX_TRIG_PORT, SENSOR_LX_TRIG_PIN);
     TM_GPIO_SetPinLow(SENSOR_RX_TRIG_PORT, SENSOR_RX_TRIG_PIN);
-
 }
 
 /*
