@@ -33,7 +33,7 @@ extern void sensors_init();
 
 /*
  * Reads both sensors value, see the read_sensor function.
- * */
+ */
 extern void sensors_read();
 
 /*
@@ -49,7 +49,7 @@ extern void sensors_stop_trigger();
 
 /*
  * Returns the last calculated distance.
- * */
+ */
 extern int_t sensors_get_last_distance();
 
 

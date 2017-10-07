@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Profile xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_6JPRUKjoEeeCIOQJJAP7KQ" name="Components">
+  <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ZDm3wKjpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_FNEogKplEeea3OaFkRFgUA" name="Components" nsURI="http:///schemas/Components/_FJE5UKplEeea3OaFkRFgUA/5" nsPrefix="Components">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_FNFPkKplEeea3OaFkRFgUA" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_FNFPkaplEeea3OaFkRFgUA" key="Version" value="0.0.6"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_FNFPkqplEeea3OaFkRFgUA" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_FNFPk6plEeea3OaFkRFgUA" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_FNFPlKplEeea3OaFkRFgUA" key="Date" value="2017-10-06"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_FNFPlaplEeea3OaFkRFgUA" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FNEogaplEeea3OaFkRFgUA" name="HwComponent" eSuperTypes="_FNEoiKplEeea3OaFkRFgUA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_FNEogqplEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_9Z3UkKjoEeeCIOQJJAP7KQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FNEog6plEeea3OaFkRFgUA" name="VCC" ordered="false" lowerBound="1" eType="_FNEoi6plEeea3OaFkRFgUA"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FNEohaplEeea3OaFkRFgUA" name="GND" ordered="false" lowerBound="1" eType="_FNEoi6plEeea3OaFkRFgUA"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FNEoiKplEeea3OaFkRFgUA" name="Component">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_FNEoiaplEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_oW2YUKjpEeeCIOQJJAP7KQ"/>
+        <eSuperTypes xmi:type="ecore:EClass" href="http://www.eclipse.org/papyrus/0.7.0/SysML#//blocks/Block"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EDataType" xmi:id="_FNEoi6plEeea3OaFkRFgUA" name="Pin" instanceClassName="java.lang.String">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_FNEojKplEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_EmZMsKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FNEojaplEeea3OaFkRFgUA" name="SwComponent" eSuperTypes="_FNEoiKplEeea3OaFkRFgUA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_FNEojqplEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_rXYKEKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_nDI18KpjEeea3OaFkRFgUA" name="Components" nsURI="http:///schemas/Components/_m-tB4KpjEeea3OaFkRFgUA/4" nsPrefix="Components">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_nDJdAapjEeea3OaFkRFgUA" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_nDJdAqpjEeea3OaFkRFgUA" key="Version" value="0.0.5"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_nDJdA6pjEeea3OaFkRFgUA" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_nDJdBKpjEeea3OaFkRFgUA" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_nDJdBapjEeea3OaFkRFgUA" key="Date" value="2017-10-06"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_nDJdBqpjEeea3OaFkRFgUA" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_nDI18apjEeea3OaFkRFgUA" name="HwComponent" eSuperTypes="_nDI1-KpjEeea3OaFkRFgUA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_nDI18qpjEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_9Z3UkKjoEeeCIOQJJAP7KQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_nDI186pjEeea3OaFkRFgUA" name="VCC" ordered="false" lowerBound="1" eType="_nDI1-6pjEeea3OaFkRFgUA"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_nDI19apjEeea3OaFkRFgUA" name="GND" ordered="false" lowerBound="1" eType="_nDI1-6pjEeea3OaFkRFgUA"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_nDI1-KpjEeea3OaFkRFgUA" name="Component">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_nDI1-apjEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_oW2YUKjpEeeCIOQJJAP7KQ"/>
+        <eSuperTypes xmi:type="ecore:EClass" href="http://www.eclipse.org/papyrus/0.7.0/SysML#//blocks/Block"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EDataType" xmi:id="_nDI1-6pjEeea3OaFkRFgUA" name="Pin" instanceClassName="java.lang.String">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_nDI1_KpjEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_EmZMsKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_nDI1_apjEeea3OaFkRFgUA" name="SwComponent" eSuperTypes="_nDI1-KpjEeea3OaFkRFgUA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_nDI1_qpjEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_rXYKEKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_GcnFIKpiEeea3OaFkRFgUA" name="Components" nsURI="http:///schemas/Components/_GVyrcKpiEeea3OaFkRFgUA/3" nsPrefix="Components">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GcphYKpiEeea3OaFkRFgUA" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GcphYapiEeea3OaFkRFgUA" key="Version" value="0.0.4"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GcphYqpiEeea3OaFkRFgUA" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GcphY6piEeea3OaFkRFgUA" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GcphZKpiEeea3OaFkRFgUA" key="Date" value="2017-10-06"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GcphZapiEeea3OaFkRFgUA" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_GcnFIapiEeea3OaFkRFgUA" name="HwComponent" eSuperTypes="_GcnFKKpiEeea3OaFkRFgUA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GcnFIqpiEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_9Z3UkKjoEeeCIOQJJAP7KQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_GcnFI6piEeea3OaFkRFgUA" name="VCC" ordered="false" lowerBound="1" eType="_GcnFK6piEeea3OaFkRFgUA"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_GcnFJapiEeea3OaFkRFgUA" name="GND" ordered="false" lowerBound="1" eType="_GcnFK6piEeea3OaFkRFgUA"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_GcnFKKpiEeea3OaFkRFgUA" name="Component">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GcnFKapiEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_oW2YUKjpEeeCIOQJJAP7KQ"/>
+        <eSuperTypes xmi:type="ecore:EClass" href="http://www.eclipse.org/papyrus/0.7.0/SysML#//blocks/Block"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EDataType" xmi:id="_GcnFK6piEeea3OaFkRFgUA" name="Pin" instanceClassName="java.lang.String">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GcnFLKpiEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_EmZMsKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_GcnFLapiEeea3OaFkRFgUA" name="SwComponent" eSuperTypes="_GcnFKKpiEeea3OaFkRFgUA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GcnFLqpiEeea3OaFkRFgUA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_rXYKEKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="__UNE4KjpEeeCIOQJJAP7KQ" name="Components" nsURI="http:///schemas/Components/__QFZ4KjpEeeCIOQJJAP7KQ/2" nsPrefix="Components">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__UNr8ajpEeeCIOQJJAP7KQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__UNr8qjpEeeCIOQJJAP7KQ" key="Version" value="0.0.3"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__UNr86jpEeeCIOQJJAP7KQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__UNr9KjpEeeCIOQJJAP7KQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__UNr9ajpEeeCIOQJJAP7KQ" key="Date" value="2017-10-04"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__UNr9qjpEeeCIOQJJAP7KQ" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="__UNE4ajpEeeCIOQJJAP7KQ" name="HwComponent" eSuperTypes="__UNE6KjpEeeCIOQJJAP7KQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__UNE4qjpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_9Z3UkKjoEeeCIOQJJAP7KQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="__UNE46jpEeeCIOQJJAP7KQ" name="VCC" ordered="false" lowerBound="1" eType="__UNE66jpEeeCIOQJJAP7KQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="__UNE5ajpEeeCIOQJJAP7KQ" name="GND" ordered="false" lowerBound="1" eType="__UNE66jpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="__UNE6KjpEeeCIOQJJAP7KQ" name="Component">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__UNE6ajpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_oW2YUKjpEeeCIOQJJAP7KQ"/>
+        <eSuperTypes xmi:type="ecore:EClass" href="http://www.eclipse.org/papyrus/0.7.0/SysML#//blocks/Block"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EDataType" xmi:id="__UNE66jpEeeCIOQJJAP7KQ" name="Pin" instanceClassName="java.lang.String">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__UNE7KjpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_EmZMsKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="__UNE7ajpEeeCIOQJJAP7KQ" name="SwComponent" eSuperTypes="__UNE6KjpEeeCIOQJJAP7KQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__UNE7qjpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_rXYKEKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_yXAOoKjpEeeCIOQJJAP7KQ" name="Components" nsURI="http:///schemas/Components/_yS0SMKjpEeeCIOQJJAP7KQ/1" nsPrefix="Components">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_yXA1sajpEeeCIOQJJAP7KQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yXA1sqjpEeeCIOQJJAP7KQ" key="Version" value="0.0.2"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yXA1s6jpEeeCIOQJJAP7KQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yXA1tKjpEeeCIOQJJAP7KQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yXA1tajpEeeCIOQJJAP7KQ" key="Date" value="2017-10-04"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yXA1tqjpEeeCIOQJJAP7KQ" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_yXAOoajpEeeCIOQJJAP7KQ" name="HwComponent" eSuperTypes="_yXAOqKjpEeeCIOQJJAP7KQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_yXAOoqjpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_9Z3UkKjoEeeCIOQJJAP7KQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_yXAOo6jpEeeCIOQJJAP7KQ" name="VCC" ordered="false" lowerBound="1" eType="_yXAOq6jpEeeCIOQJJAP7KQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_yXAOpajpEeeCIOQJJAP7KQ" name="GND" ordered="false" lowerBound="1" eType="_yXAOq6jpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_yXAOqKjpEeeCIOQJJAP7KQ" name="Component">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_yXAOqajpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_oW2YUKjpEeeCIOQJJAP7KQ"/>
+        <eSuperTypes xmi:type="ecore:EClass" href="http://www.eclipse.org/papyrus/0.7.0/SysML#//blocks/Block"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EDataType" xmi:id="_yXAOq6jpEeeCIOQJJAP7KQ" name="Pin" instanceClassName="java.lang.String">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_yXAOrKjpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_EmZMsKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_yXAOrajpEeeCIOQJJAP7KQ" name="SwComponent" eSuperTypes="_yXAOqKjpEeeCIOQJJAP7KQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_yXAOrqjpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_rXYKEKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_ZDm3wajpEeeCIOQJJAP7KQ" name="Components" nsURI="http:///schemas/Components/_Y-ThAKjpEeeCIOQJJAP7KQ/0" nsPrefix="Components">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ZDoF4KjpEeeCIOQJJAP7KQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ZDoF4ajpEeeCIOQJJAP7KQ" key="Version" value="0.0.1"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ZDoF4qjpEeeCIOQJJAP7KQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ZDoF46jpEeeCIOQJJAP7KQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ZDoF5KjpEeeCIOQJJAP7KQ" key="Date" value="2017-10-04"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ZDoF5ajpEeeCIOQJJAP7KQ" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_ZDm3wqjpEeeCIOQJJAP7KQ" name="HwComponent">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ZDm3w6jpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_9Z3UkKjoEeeCIOQJJAP7KQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ZDm3xKjpEeeCIOQJJAP7KQ" name="VCC" ordered="false" lowerBound="1" eType="_ZDm3yKjpEeeCIOQJJAP7KQ"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ZDm3xqjpEeeCIOQJJAP7KQ" name="GND" ordered="false" lowerBound="1" eType="_ZDm3yKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EDataType" xmi:id="_ZDm3yKjpEeeCIOQJJAP7KQ" name="Pin" instanceClassName="java.lang.String">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ZDm3yajpEeeCIOQJJAP7KQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_EmZMsKjpEeeCIOQJJAP7KQ"/>
+      </eClassifiers>
+    </contents>
+  </eAnnotations>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_c6qB0KjpEeeCIOQJJAP7KQ">
+    <importedPackage xmi:type="uml:Profile" href="pathmap://SysML_PROFILES/SysML.profile.uml#_fSw28LX7EduFmqQsrNB9lw"/>
+  </packageImport>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_c6qB0ajpEeeCIOQJJAP7KQ">
+    <importedPackage xmi:type="uml:Profile" href="pathmap://SysML_PROFILES/SysML.profile.uml#_rpx28LX7EduFmqQsrNB9lw"/>
+  </packageImport>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_c6qB0qjpEeeCIOQJJAP7KQ">
+    <importedPackage xmi:type="uml:Profile" href="pathmap://SysML_PROFILES/SysML.profile.uml#_Gx8MgLX7EduFmqQsrNB9lw"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_9Z3UkKjoEeeCIOQJJAP7KQ" name="HwComponent">
+    <generalization xmi:type="uml:Generalization" xmi:id="_hki-EKjpEeeCIOQJJAP7KQ" general="_oW2YUKjpEeeCIOQJJAP7KQ"/>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_DfCjEKjpEeeCIOQJJAP7KQ" name="VCC" type="_EmZMsKjpEeeCIOQJJAP7KQ"/>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_Nf_qoKjpEeeCIOQJJAP7KQ" name="GND" type="_EmZMsKjpEeeCIOQJJAP7KQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_EmZMsKjpEeeCIOQJJAP7KQ" name="Pin"/>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_oW2YUKjpEeeCIOQJJAP7KQ" name="Component">
+    <generalization xmi:type="uml:Generalization" xmi:id="_qpNcgKjpEeeCIOQJJAP7KQ">
+      <general xmi:type="uml:Stereotype" href="pathmap://SysML_PROFILES/SysML.profile.uml#_8J2A8LVAEdu2ieF4ON8UjA"/>
+    </generalization>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_rXYKEKjpEeeCIOQJJAP7KQ" name="SwComponent">
+    <generalization xmi:type="uml:Generalization" xmi:id="_uwqaEKjpEeeCIOQJJAP7KQ" general="_oW2YUKjpEeeCIOQJJAP7KQ"/>
+  </packagedElement>
+</uml:Profile>
