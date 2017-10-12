@@ -1,0 +1,191 @@
+\chapter{Software implementation}
+
+
+%An embedded system is a special-purpose computer system designed to perform one or a few dedicated functions, sometimes with real-time computing constraints. Hence, developing software for an embedded system is one of the most critical phase of the design of the entire system. Furthermore meet some real-time constraint it's not easy without some analysis. Developing real-time software requires additional special care, due to the extra time dimension. An error occurring in a particular state may not occur again by restarting the system in the same state, since time is different. Design time in not wasted, but invested in the future.
+% Si parla del processo a V? Abbiamo usato un bottom-up approach?
+
+We will now show briefly software organization, highlighting major features provided by each of its components.
+
+
+
+\section{RTOS and API}
+
+Since this system has to deal with real-time requirements, a real-time operating system (RTOS) is needed to ensure the fulfillment of these requirements. To this, we used Erika Enterprise RTOS, which provides support to fixed and dynamic priority scheduling, priority ceiling and so on.
+
+Erika OS is a modular and incremental operating system, OSEK/VDX standard compatible, which can be compiled in such a way it provides only needed resources and primitives, hence reducing his already small flash memory footprint.
+
+System requirements could be accomplished by simply including only fixed priority scheduling support, hence we used the smallest-footprint version available to implement system's controller, including only needed ST libraries. In addition to ST provided libraries, we included some other higher-level libraries, to manage respectively servo motor and input/output pins.
+
+
+%In order to meet all the deadlines and make the system work correctly, an RTOS has mounted on the STM32F4 board. In particular it is used Erika Enteprise that is an open-source OSEK/VDX Hard Real Time Operating System. Erika OS provide an hard real-time support with fixed priority scheduling and immediate priority ceiling. Furthermore provide also support for earliest deadline first (EDF) and resource reservation schedulers. One of the most important feature of Erika is that can be used in an sort of "incremental way" including or excluding at flash time some libraries. Using this way of reasoning, the footprint of Erika on main flash of microcontroller is only 1-4 Kb, hence suitable for 8 to 32 bit microcontrollers. Last but not least, Erika can be flashed and configured easily  using RT-Druid with Eclipse plugins.
+% Scriviamo qualcosa sulle lib di Tilen? No, già detto un minimo
+
+\section{Software components}
+
+In this section we will illustrate application and control software organization.
+
+\subsection{Main module and tasks}
+
+Main module is in charge of coordinating all other modules. It handles {\em SysTick} timer interrupts and manages the three concurrent real-time tasks that compose the system:
+
+\begin{description}
+    \item[GUI Task] executed with a period of \SI{90}{\milli\second}, it checks whether the user has pressed B\_ZOOM and refreshes the LCD screen.
+    \item[Step Task] executed with a period of \SI{70}{\milli\second}, it sends the trigger pulse to both sensors and reads previously detected distance, moving then the motor to the next desired position.
+    \item[Stop Trigger Task]  executed with the same period of Step Task, but with a different phase, it simply stops sending the trigger signal to both sensors.
+\end{description}
+
+
+\subsection{Motor module}
+
+Motor module is in charge of handling all servo motor routines and control, hence taking care of PWM generation, motor state and so on. This is all transparent to other modules, which can only see the following interface. In the code, we refer to user-domain positions as the positions as they are perceived by the user. The library converts automatically all provided positions in user-domain in motor-domain positions (i.e. width of PWM pulse).
+
+% The motor library permit to control easily the servo motor without take care of modulating the PWM. A simple data struct contains data of the motor. An example of function implemented can be found in code snippet below.
+
+\begin{minted}{c}
+/*
+ * Returns the user range domain motor position.
+ * in:  void
+ * ret: int_t, motor position in user range domain
+ */
+extern int_t motor_get_pos();
+
+/*
+ * Initializes motor with initial parameters.
+ * in:  initial motor position
+ *      initial motor direction%*      default motor increment % What?
+ * ret: void
+ */
+extern void motor_init(int_t init_pos, direction_t init_dir);
+
+/*
+ * Sets position of the motor and moves the motor to chosen position
+ * in:  new position of the motor
+ * ret: void
+ */
+extern void motor_set_pos(int_t position);
+
+/*
+ * Sets a new value for the direction of the motor movement
+ * in:  new value for the direction
+ * ret: void
+ */
+extern void motor_set_dir(direction_t direction);
+
+/*
+ * Moves the motor following the current increment and direction
+ * in:  void
+ * ret: void
+ */
+extern void motor_step();
+\end{minted}
+
+
+\subsection{GUI module}
+
+LCD screen handling and refresh is taken care by GUI module. This module uses a custom defined library to refresh ``widgets'' content on the screen. Screen content changes between different modes:
+\begin{description}
+    \item[Calibration Mode] In this mode a message is printed on the screen telling the user to move the mechanical arm in the desired orientation.
+    \item[Scanning Mode] In this mode it will be shown background in Figure \ref{fig:background}, over which current zoom level, maximum distance and obstacles positions will be drawn, according to what has been specified in {\em User Requirements}.
+\end{description}
+
+The GUI module interface is the following:
+
+%All the things that regards the LCD screen and in general the graphical user interface of the system is managed by the GUI library. In the code snippet below some example of function realized can be found.
+
+\begin{figure}[tp]
+\centering
+\includegraphics[width=0.6\textwidth, keepaspectratio]{img/background-with-interface.png}
+\caption{LCD main background}
+\label{fig:background}
+\end{figure}
+
+\begin{minted}{c}
+/*
+ * Changes zoom level to the next one, starting back from zero if
+ * maximum zoom level is reached.
+ * in:  void
+ * ret: void
+ */
+extern void gui_change_zoom_level();
+
+/*
+ * Sets current position and distance that has been measured.
+ * in:  void
+ * ret: void
+ */
+extern void gui_set_position(int_t pos, int_t distance);
+
+/*
+ * Shows on the screen the calibration message.
+ * in:  void
+ * ret: void
+ */
+extern void gui_show_calibration_message();
+
+/*
+ * Initializes the interface for Scanning mode with all static
+ * texts and background.
+ * in:  void
+ * ret: void
+ */
+extern void gui_interface_init();
+
+/*
+ * Refreshes LCD screen, to be called only in Scanning mode after
+ * gui_interface_init call.
+ * in:  void
+ * ret: void
+ */
+extern void gui_refresh();
+\end{minted}
+
+\subsection{Sensor module}
+
+Sensor module handles all sensor pins and states, requiring main module to call some methods at specified intervals. In particular, this module expects a file called \path{constants.h} in which it is defined a \mintinline{c}{SYST_PERIOD} constant, expressing {\em SysTick} period in microseconds. This because \mintinline{c}{sensor_read} function shall be called every \mintinline{c}{SYST_PERIOD} \si{\micro\second} for distances to be returned correctly by this module.
+
+Module interface is the following:
+
+% Another library developed is the sensor library. It realize the function needed to trigger the sensors, read the response and calculate the distance. An example of the implemented function can be found in the code snippet below.
+
+\begin{minted}{c}
+/* 
+ * Initializes all sensors' pins and ports
+ * in:  void
+ * ret: void
+ */
+extern void sensors_init();
+
+/*
+ * Reads both sensors value, to be called each SYST_PERIOD microseconds
+ * to obtain valid measured distances in centimeters.
+ * in:  void
+ * ret: void
+ */
+extern void sensors_read();
+
+/*
+ * Sends trigger signal, raising trigger line of both sensors.
+ * At the moment of sending the trigger pulse it also updates the
+ * global calculated distance at the previous step.
+ * in:  void
+ * ret: void
+ */
+extern void sensors_send_trigger();
+
+/*
+ * Stops trigger signal, lowering down both lines.
+ * in:  void
+ * ret: void
+ */
+extern void sensors_stop_trigger();
+
+/*
+ * Returns the last calculated distance.
+ * in:  void
+ * ret: int_t, the last calculated distance
+ */
+extern int_t sensors_get_last_distance();
+\end{minted}
+
+
+

@@ -1,0 +1,135 @@
+%% (Master) Thesis template
+% Template version used: v1.4
+%
+% Adapted from Adrian Nievergelt's template for the ADPS
+
+\documentclass[11pt,a4paper,oneside]{memoir}
+
+%% Packages
+%% ========
+
+%% Used to get smaller margins
+\setlrmarginsandblock{2.5cm}{2.5cm}{*}
+\setulmarginsandblock{3.5cm}{3.5cm}{*}
+\checkandfixthelayout
+\fixpdflayout
+
+\usepackage{lscape}
+
+\usepackage[export]{adjustbox}
+
+\usepackage[obeyspaces]{url}
+
+
+
+%% LaTeX Font encoding -- DO NOT CHANGE
+\usepackage[OT1]{fontenc}
+
+%% Babel provides support for languages: 
+%% use 'english' for British
+%% use 'american' for American English
+
+\usepackage[english]{babel}
+
+%% Input encoding 'utf8'.
+\usepackage[utf8]{inputenc}
+
+%% Math used packages
+\usepackage[sc]{mathpazo}
+\usepackage{amsmath,amssymb,amsfonts,mathrsfs}
+\usepackage[amsmath,thmmarks]{ntheorem}
+
+%% LaTeX' own graphics handling
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{tikz}
+\usepackage{float}
+
+%% Some used packages
+\usepackage{soul}
+\usepackage{minted}
+\usepackage{pdfpages}
+\input{./extra/extrapackages}
+
+%% Our layout configuration.  DO NOT CHANGE.
+\input{./layout/layoutsetup}
+
+%% Theorem environments.
+\input{./layout/theoremsetup}
+
+%% Helpful macros.
+\input{./extra/macrosetup}
+
+%% Make document internal hyperlinks wherever possible.
+\usepackage[linkcolor=black,colorlinks=true,citecolor=black,filecolor=black]{hyperref}
+
+%% GABRIELE ARA NOTICE: changing the default font
+%%\usepackage{palatino}
+
+
+
+%% Document information
+%% ====================
+
+\title{Sonar implementation for STM Discovery Board}
+\author{Gabriele Ara, Gabriele Serra}
+\thesistype{Project report}
+\advisors{Prof.\ Marco Di Natale}
+\department{Design of Embedded System}
+\uniname{Scuola Superiore Sant'Anna}
+\date{September, 2017}
+
+
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+
+
+\begin{document}
+
+\frontmatter
+
+%% Title page is auto generated from information above.
+\begin{titlingpage}
+  \calccentering{\unitlength}
+  \begin{adjustwidth*}{\unitlength-24pt}{-\unitlength-24pt}
+    \maketitle
+  \end{adjustwidth*}
+\end{titlingpage}
+
+%% The abstract of your thesis.  Edit the file as needed.
+\input{abstract}
+
+%% TOC with the proper setup, do not change.
+\cleartorecto
+\tableofcontents
+\mainmatter
+
+%% Your real content!
+\input{./chapters/1.Introduction}
+\input{./chapters/2.UserRequirements}
+\input{./chapters/3.FunctionalRequirements}
+\input{./chapters/4.Architecture}
+\input{./chapters/5.Implementation}
+\input{./chapters/6.Testing}
+
+
+
+
+
+%%\input{./chapters/11.introduction}
+%%\input{./chapters/22.rules}
+%%\input{./chapters/33.typography}
+%%\input{./chapters/44.sections}
+
+\appendix
+
+%%\input{./chapters/x.appendix}
+
+\backmatter
+
+\bibliographystyle{plain}
+%%\bibliography{refs}
+
+\end{document}

@@ -1,0 +1,89 @@
+%% A command used in this section, see usage in following lines
+\newcommand{\sonar}[1][]{%
+\ifthenelse{\equal{#1}{}}{{\em sonar}}{{\em #1 sonar}}%
+}
+
+
+
+\newcommand{\wmodeact}[4]{%
+\begin{itemize}%
+    \item \textbf{Pre-condition}: \ifthenelse{\equal{#1}{}}{--}{#1}%
+    \item \textbf{Input sequence}: \ifthenelse{\equal{#2}{}}{--}{#2}%
+    \item \textbf{Ouput sequence}: \ifthenelse{\equal{#3}{}}{--}{#3}%
+    \item \textbf{Post-condition}: \ifthenelse{\equal{#4}{}}{--}{#4}%
+\end{itemize}%
+}
+
+%%\newcommand{\sonar}[1]{{\em #1 sonar}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\chapter{Introduction}
+
+In this section we will provide a system description from the user perspective, while in next sections this description will be analyzed and rewritten in a more precise and rigorous definition.
+
+\section{What the system is supposed to do}
+
+We want to develop a system which will be able to detect the distance of objects within a short range and then show these objects positions on a screen. The system shall be able to detect objects in the half space in front of him, displaying both the angle of the obstacle's positions from the perspective of the system and their distance.
+
+The system will have two operational modes:
+\begin{description}
+    \item[Calibration Mode] In this mode the user will move manually the mechanical arm of the system to its initial position. 
+    \item[Scanning Mode] In this mode the system will scan all the possible angles in front of him, from \SIrange[retain-explicit-plus]{-90}{+90}{\degree}, rotating his sensor(s) first in a direction, then in the opposite one. A symbol shall represent the system orientation at any time.
+\end{description}
+
+While the system is in Scanning Mode,  it shall be possible for the system's user to switch between different views of the obstacles individuated by the system, changing the zoom from a minimum level to a greater one, until a maximum level is reached, then the minimum zoom level is shown again.
+
+In that mode, the screen will show the current zoom level, the measurement unit in which distances are expressed in the current zoom level, a grid and a symbol for each detected object, printed on top of the grid, depending on the object distance and angle.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%% Formatting the numbered list that follows
+%% Remember to reuse these commands if the next lists shall use a different format
+\setlist[enumerate,1]{label*=\arabic*.,font=\bfseries}
+\setlist[enumerate,2]{label*=\arabic*.,font=\bfseries}
+\setlist[enumerate,3]{label*=\arabic*.,font=\bfseries}
+\setlist[enumerate,4]{label*=\arabic*.}
+
+
+
+
+
+%%TODO
+
+%%To do so, the system will use a \sonar[], which is a system that uses sound propagation in a fluid (like water or, in our case, air) to measure the distance of obstacles and other objects from the system position.
+
+%%In particular, what we wanted to develop was an \sonar[active], that is a \sonar[] which is emitting pulses of sounds and listening for echoes in order to detect obstacles. To do so, an \sonar[active] typically uses a sound transmitter to generate an ultrasonic wave and then a receiver to detect that wave's reflections (echo).
+

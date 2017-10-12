@@ -1,0 +1,18 @@
+%% This file is `logo.sty'
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{layout/logo}[2017/09/30 0.1a Logo command]
+\RequirePackage{graphicx}
+%%\newcommand{\logo}[1][\textwidth]{\resizebox{#1}{!}{\begin{center}\includegraphics{layout/logo2x.png}\end{center}}}
+\newcommand{\logo}[1][\textwidth]{\hfill\includegraphics[width=#1]{layout/logo2x.png}\hspace*{\fill}}
+\endinput
+
+
+%%\NeedsTeXFormat{LaTeX2e}
+%%\ProvidesPackage{layout/logo}[2017/09/30 0.1a Logo command]
+%%\RequirePackage{graphicx}
+%%\newcommand{\logo}[1][\textwidth]{\resizebox{#1}{!}{\includegraphics{layout/logo2x.png}}}
+%%\endinput
+
+%%
+%% End of file `logo.sty'

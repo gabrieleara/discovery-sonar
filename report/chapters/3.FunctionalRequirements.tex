@@ -1,0 +1,97 @@
+\chapter{Functional requirements}
+
+All terms used in this description are defined in the Data Dictionary contained in Table \ref{tab:func_data_dictionary}.
+
+\begin{table}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c|l|l|c|c|c|c}
+\hline
+\textbf{ID} & \multicolumn{1}{c|}{\textbf{Term}} & \multicolumn{1}{c|}{\textbf{Text Description}}                                                                                   & \textbf{Direction} & \textbf{DataType} & \textbf{Port} & \textbf{Pin} \\ \hline
+I1          & B\_RESET                           & Button used to reset the system                                                                                                  & IN                 & boolean           &               &              \\ \hline
+I2          & B\_ZOOM                            & \begin{tabular}[c]{@{}l@{}}Button used to change current zoom level\\ or to start the system of in Calibration Mode\end{tabular} & IN                 & boolean           &               &              \\ \hline
+O1          & TRIG\_RX                           & Trigger signal for right sensor                                                                                                  & OUT                & boolean           & GPIOA         & 7            \\ \hline
+O2          & TRIG\_LX                           & Trigger signal for left sensor                                                                                                   & OUT                & boolean           & GPIOB         & 15           \\ \hline
+I3          & ECHO\_RX                           & Echo response of right sensor                                                                                                    & IN                 & boolean           & GPIOA         & 5            \\ \hline
+I4          & ECHO\_LX                           & Echo response of left sensor                                                                                                     & IN                 & boolean           & GPIOB         & 13           \\ \hline
+O3          & PWM                                & PWM used to control motor position                                                                                               & OUT                & boolean           & GPIOA         & 1            \\ \hline
+O4          & LCD\_BUS                           & Bus connecting the board to LCD screen                                                                                           & OUT                & boolean           & CON3           &             
+\end{tabular}%
+}
+\caption{Functional Requirements Data Dictionary}
+\label{tab:func_data_dictionary}
+\end{table}
+
+Following we have functional requirements:
+
+
+\begin{enumerate}
+    \item Two {\em sensors} shall be used to detect obstacles within given ranges.
+    
+    \begin{enumerate}
+        \item Sensors shall be positioned on a mechanical {\em arm}, mounted on top of a {\em motor}, which will change arm's angular position.
+        
+        \item Sensors will change {\em orientation} with the mechanical arm, along the angle range in one direction or in the opposite, scanning angles in that range in fixed steps.
+        
+        \item More precisely, every \SI{70}{\milli\second} the arm angular position shall change by a {\em fixed angle}, depending on the system's {\em angular speed} and current direction.
+        
+        \item For each position reached by the sensors, the system shall try to detect whether obstacle is present or not and if so, what is its distance.
+        
+        \item When the system reaches one end of the angle range moving in a certain {\em direction}, it shall start moving in the opposite direction, until the other end is reached.
+        
+        \item Distances of obstacles detected by each sensor shall be used to compute a triangulation of currently detected object.
+        
+        
+    \end{enumerate}
+    
+    \item For each detected obstacle, the system shall show a {\em marker} on the screen.
+    
+    \begin{enumerate}
+    
+        \item Markers will be positioned inside a {\em grid}, which will represent the space around the system. The grid will allow the user to perceive the obstacle's distance and angle.
+        
+        \item When changing zoom level, all the markers shall be deleted and re-drawn on the screen, in order to correctly show obstacles' distance in the current zoom level scale. This shall however still be compliant with what expressed in point \ref{marker-shown-obst} of user requirements.
+    
+    \end{enumerate}
+    
+\end{enumerate}
+
+\section{Working Modes}
+
+This section illustrates all working modes.
+
+\subsection{Calibration Mode}
+
+\begin{enumerate}
+    \item \textbf{Entering mode}\\
+        System enters this mode as soon as it is turned on or at reset.
+    \item \textbf{While in mode}
+        \begin{enumerate}
+            \item
+            \wmodeact{}{User presses B\_ZOOM.}{}{System is now in Scanning Mode.}
+            \item
+            \wmodeact{}{User presses B\_RESET.}{}{System shuts down and resets itself.}
+        \end{enumerate}
+        
+\end{enumerate}
+    
+
+\subsection{Scanning Mode}
+
+\begin{enumerate}
+    \item \textbf{Entering mode}\\
+        System enters this mode as soon as user presses B\_ZOOM during Calibration Mode.
+    
+    \item \textbf{While in mode}
+        \begin{enumerate}
+            \item
+            \wmodeact{Current zoom level is different from the maximum one -- which is 5.}{user presses the B\_ZOOM.}{}{
+            Current zoom level is equal to the one before this action + 1.}
+            
+            \item
+            \wmodeact{Current zoom level is equal to the maximum one -- which is 5.}{User presses B\_ZOOM.}{}{Current zoom level is equal to the initial one -- which is 0.}
+            
+            \item
+            \wmodeact{}{User presses B\_RESET.}{}{System shuts down and resets itself.}
+        \end{enumerate}
+\end{enumerate}

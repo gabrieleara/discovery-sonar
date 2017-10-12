@@ -1,0 +1,111 @@
+%% Memoir layout setup
+
+% Dependencies
+\usepackage{layout/logo}
+
+% Turn extra space before chapter headings off.
+\setlength{\beforechapskip}{0pt}
+
+\nonzeroparskip
+\parindent=0pt
+\defaultlists
+
+%% GABRIELE ARA NOTICE: I changed all the sffamily occurrences with rmfamily, to get serif font.
+
+% Chapter style redefinition
+\makeatletter
+
+\if@twoside
+  \pagestyle{Ruled}
+  \copypagestyle{chapter}{Ruled}
+\else
+  \pagestyle{ruled}
+  \copypagestyle{chapter}{ruled}
+\fi
+\makeoddhead{chapter}{}{}{}
+\makeevenhead{chapter}{}{}{}
+\makeheadrule{chapter}{\textwidth}{0pt}
+\copypagestyle{abstract}{empty}
+
+\makechapterstyle{bianchimod}{%
+  \chapterstyle{default}
+  \renewcommand*{\chapnamefont}{\normalfont\Large\rmfamily}
+  \renewcommand*{\chapnumfont}{\normalfont\Large\rmfamily}
+  \renewcommand*{\printchaptername}{%
+    \chapnamefont\centering\@chapapp}
+  \renewcommand*{\printchapternum}{\chapnumfont {\thechapter}}
+  \renewcommand*{\chaptitlefont}{\normalfont\huge\rmfamily}
+  \renewcommand*{\printchaptertitle}[1]{%
+    \hrule\vskip\onelineskip \centering \chaptitlefont\textbf{\vphantom{gyM}##1}\par}
+  \renewcommand*{\afterchaptertitle}{\vskip\onelineskip \hrule\vskip
+    \afterchapskip}
+  \renewcommand*{\printchapternonum}{%
+    \vphantom{\chapnumfont {9}}\afterchapternum}}
+
+% Use the newly defined style
+\chapterstyle{bianchimod}
+
+\setsecheadstyle{\Large\bfseries\rmfamily}
+\setsubsecheadstyle{\large\bfseries\rmfamily}
+\setsubsubsecheadstyle{\bfseries\rmfamily}
+\setparaheadstyle{\normalsize\bfseries\rmfamily}
+\setsubparaheadstyle{\normalsize\itshape\rmfamily}
+\setsubparaindent{0pt}
+
+% Set captions to a more separated style for clearness
+\captionnamefont{\rmfamily\bfseries\footnotesize}
+\captiontitlefont{\rmfamily\footnotesize}
+\setlength{\intextsep}{16pt}
+\setlength{\belowcaptionskip}{1pt}
+
+% Set section and TOC numbering depth to subsection
+\setsecnumdepth{subsection}
+\settocdepth{subsection}
+%%begin novalidate
+%% Titlepage adjustments
+\pretitle{\vspace{0pt plus 0.7fill}\begin{center}\HUGE\rmfamily\bfseries}
+\posttitle{\end{center}\par}
+\preauthor{\par\begin{center}\let\and\\\Large\rmfamily}
+\postauthor{\end{center}}
+\predate{\par\begin{center}\Large\rmfamily}
+\postdate{\end{center}}
+%%end novalidate
+\def\@advisors{}
+\newcommand{\advisors}[1]{\def\@advisors{#1}}
+\def\@department{}
+\newcommand{\department}[1]{\def\@department{#1}}
+\def\@uniname{}
+\newcommand{\uniname}[1]{\def\@uniname{#1}}
+\def\@thesistype{}
+\newcommand{\thesistype}[1]{\def\@thesistype{#1}}
+
+%%\renewcommand{\maketitlehooka}{\noindent\logo[3in]}
+\renewcommand{\maketitlehooka}{\noindent\logo[0.7\textwidth]}
+
+\renewcommand{\maketitlehookb}{\vspace{1in}%
+  \par\begin{center}\Large\rmfamily\@thesistype\end{center}}
+
+\renewcommand{\maketitlehookd}{%
+  \vfill\par
+  \begin{flushright}
+    \rmfamily
+    \@advisors\par
+    \@department \par
+    \@uniname
+  \end{flushright}
+}
+
+\checkandfixthelayout
+
+\setlength{\droptitle}{-48pt}
+
+\makeatother
+
+% This defines how theorems should look. Best leave as is.
+\theoremstyle{plain}
+\setlength\theorempostskipamount{0pt}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:

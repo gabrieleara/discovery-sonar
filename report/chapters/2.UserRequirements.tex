@@ -1,0 +1,64 @@
+\chapter{User requirements}
+
+All terms used in this description are defined in the Data Dictionary contained in Table \ref{tab:user_data_dictionary}.
+
+\begin{table}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c|l|l|c|c|c|c|c|c}
+\hline
+\textbf{ID} & \multicolumn{1}{c|}{\textbf{Term}} & \multicolumn{1}{c|}{\textbf{Text Description}}                                                                    & \textbf{Data Type} & \textbf{Unit} & \textbf{Default} & \textbf{Min} & \textbf{Max} & \textbf{Resolution} \\ \hline
+SMD         & SYSTEM\_MAX\_DIST                  & \begin{tabular}[c]{@{}l@{}}Maximum distance that can\\ be detected\end{tabular}                                   & int                & cm            & 600              &              &              &                     \\ \hline
+M\_A        & MAX\_ANGLE                         & Maximum angle of vision                                                                                           & float              & deg           & 90               &              &              &                     \\ \hline
+m\_a        & MIN\_ANGLE                         & Minimum angle of vision                                                                                           & float              & deg           & -90              &              &              &                     \\ \hline
+OR  & ORIENTATION                        & \begin{tabular}[c]{@{}l@{}}Angle of the arm supporting\\ the two sensors\end{tabular}                             & foat               & deg           & 0                & -90          & 90           & 2,8125              \\ \hline
+ZL          & ZOOM\_LEVEL                        & \begin{tabular}[c]{@{}l@{}}Current zoom level of the\\ system view\end{tabular}                                   & int                &               & 0                & 0            & 5            & 1                   \\ \hline
+CMD         & CURRENT\_MAX\_DIST                 & \begin{tabular}[c]{@{}l@{}}Current maximum distance\\ that can be detected with\\ current zoom level\end{tabular} & int                & \multicolumn{5}{c}{See Table \ref{tab:zoom_distance}}                                                     \\ \hline
+CDU         & CURRENT\_DISPLAYED\_UNIT           & \begin{tabular}[c]{@{}l@{}}Distance unit displayed on\\ the screen with current zoom\\ level\end{tabular}         & string             & \multicolumn{5}{c}{See Table \ref{tab:zoom_distance}}                                                    
+\end{tabular}%
+}
+\caption{User Requirements Data Dictionary}
+\label{tab:user_data_dictionary}
+\end{table}
+
+
+\begin{table}[t]
+    \centering
+    \begin{tabular}{c|rl}
+        \hline
+        Zoom Level &  \multicolumn{2}{c}{Maximum Distance}\\ \hline
+        0 & {\hspace{1.5em}}6 & \si{\metre} \\
+        1 & {\hspace{1.5em}}4 & \si{\metre} \\
+        2 & {\hspace{1.5em}}2 & \si{\metre} \\
+        3 & {\hspace{1.5em}}100 & \si{\centi\metre} \\
+        4 & {\hspace{1.5em}}50 & \si{\centi\metre} \\
+        5 & {\hspace{1.5em}}20 & \si{\centi\metre} \\
+    \end{tabular}
+    \caption{\label{tab:zoom_distance} Association between zoom level and maximum distance displayable. The measurement unit used by this table shall also be used by the screen to show this measurement.}
+    
+\end{table}
+
+
+Following are then user requirements:
+
+\begin{enumerate}
+
+    \item The system shall be able to detect {\em obstacles} within \SI{600}{\centi\metre}.
+    
+    \item Obstacles can be detected by the system if they are positioned within an {\em angle range} from \SIrange[retain-explicit-plus]{-90}{+90}{\degree} from the system's initial orientation.
+    
+    \item The system shall show on a {\em screen} detected obstacles' {\em angle} and {\em distance}. The system shall show also his current {\em orientation} on that screen.
+    
+    \item The user shall be able to change the screen {\em zoom level} pressing a {\em button}.
+    
+    \begin{enumerate}
+        \item \label{marker-shown-obst} When the system has a certain current zoom level, only detected obstacles within the distance range of that zoom level shall be shown.
+        
+        \item The distance range of the initial zoom level is equal to the system distance range, as specified in Table \ref{tab:zoom_distance}.
+        
+        \item A list of all the zoom levels in the system is shown in Table \ref{tab:zoom_distance}. The table shows also the maximum distance range of each zoom level and the {\em unit} used to display it.
+    \end{enumerate}
+    
+    \item A {\em reset button} shall also be present, to allow the user to reset the system to its initial state.
+\end{enumerate}
+    
